@@ -19,6 +19,8 @@ While contributing make a new branch in the same repository and push the new bra
 - Go to `127.0.0.1:8000/admin` and login to access admin page. You can check out models and related fields here.
 
 ### Heroku deployment
-- Staging app deployed to [https://socialback-stage.herokuapp.com/](https://socialback-stage.herokuapp.com/)
-- Production app deployed to [https://youngspheresocialback.herokuapp.com/](https://youngspheresocialback.herokuapp.com/)
-- Admin created with username `admin` and password `admin123`
+- Staging app deployed to [https://socialback-stage.herokuapp.com/](https://socialback-stage.herokuapp.com/).
+- Production app deployed to [https://youngspheresocialback.herokuapp.com/](https://youngspheresocialback.herokuapp.com/).
+- Admin created with username `admin` and password `admin123`.
+- Auto-deployment for staging enabled.
+- Review apps enabled for reviewing pull requests.
