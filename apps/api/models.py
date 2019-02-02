@@ -31,8 +31,8 @@ class Organization(models.Model):
     )
 
 class UserOrganizationMapping(models.Model):
-    user = models.ForeignKey(User)
-    organization = models.ForeignKey(Organization)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization,on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     is_amc_admin = models.BooleanField(default=False)
 
@@ -44,7 +44,7 @@ class Page(models.Model):
 
 
 class School(models.Model):
-    organization = models.OneToOneField(Organization, related_name='school_profile')
+    organization = models.OneToOneField(Organization, related_name='school_profile',on_delete=models.CASCADE)
     schoolname = models.CharField(max_length=50, blank=True, null=True)
     principal = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
@@ -53,26 +53,26 @@ class School(models.Model):
     website = models.CharField(max_length=50, blank=True, null=True)
     board = models.CharField(max_length=20, blank=True, null=True)
     schoollogo = models.ImageField(blank=True, upload_to='school_logo', default='school_logo/no-image.jpg')
-    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="school")
+    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="school",on_delete=models.CASCADE)
 
 
 class Class(models.Model):
-    organization = models.ForeignKey(Organization)
+    organization = models.ForeignKey(Organization,on_delete=models.CASCADE)
     class_level = models.CharField(max_length=5)
     display_name = models.CharField(max_length=10)
     num_sections = models.IntegerField(default=0)
 
 
 class Section(models.Model):
-    section_class = models.ForeignKey(Class)
+    section_class = models.ForeignKey(Class,on_delete=models.CASCADE)
     section_name = models.CharField(max_length=5)
     description = models.CharField(max_length=200, blank=True, null=True)
 
 
 class Course(models.Model):
-    organization = models.ForeignKey(Organization)
-    course_class = models.ForeignKey(Class)
-    course_section = models.ForeignKey(Section)
+    organization = models.ForeignKey(Organization,on_delete=models.CASCADE)
+    course_class = models.ForeignKey(Class,on_delete=models.CASCADE)
+    course_section = models.ForeignKey(Section,on_delete=models.CASCADE)
     course_name = models.CharField(max_length=50)
     description = models.CharField(max_length=144, blank=True, null=True)
     year = models.IntegerField(default=2020)
@@ -80,12 +80,12 @@ class Course(models.Model):
     courserun = models.CharField(max_length=30)
     course_id = models.CharField(max_length=80)
     course_status = models.CharField(max_length=3)
-    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="course")
+    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="course",on_delete=models.CASCADE)
 
 
 
 class UserMiniProfile(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
     first_name = models.CharField(max_length=40, blank=True, null=True)
     last_name = models.CharField(max_length=40, blank=True, null=True)
     gender = models.CharField(max_length=1, blank=True, null=True)
@@ -93,17 +93,17 @@ class UserMiniProfile(models.Model):
     contact_number = models.CharField(max_length=40, blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
     is_staff = models.BooleanField(blank=True)
-    school = models.ForeignKey(School, blank=True, null=True)
-    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="user")
+    school = models.ForeignKey(School, blank=True, null=True,on_delete=models.CASCADE)
+    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="user",on_delete=models.CASCADE)
 
 
 class UserSectionMapping(models.Model):
-    user = models.ForeignKey(User)
-    section = models.ForeignKey(Section)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    section = models.ForeignKey(Section,on_delete=models.CASCADE)
 
 class Group(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)
-    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="group")
+    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="group",on_delete=models.CASCADE)
 
 class Follow(models.Model):
     from_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='from_follow')
@@ -133,4 +133,4 @@ class Comment(models.Model):
     comment = models.CharField(max_length=150)
     time = models.DateTimeField(default=timezone.now)
     feed_id = models.ForeignKey(Feed, on_delete=models.CASCADE)
-    page_id = models.ForeignKey(Page, null=True, blank=True)
+    page_id = models.ForeignKey(Page, null=True, blank=True,on_delete=models.CASCADE)

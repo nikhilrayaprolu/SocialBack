@@ -24,3 +24,17 @@ While contributing make a new branch in the same repository and push the new bra
 - Admin created with username `admin` and password `admin123`.
 - Auto-deployment for staging enabled.
 - Review apps enabled for reviewing pull requests.
+
+###JWT-Authentication
+-JWT-Authentication implemented.
+-The frontend will request from the url('http://127.0.0.1:8000/api-token-auth/') using post method only and give a JSON object of format :-
+{
+    "username": "",
+    "password": ""
+}
+-The response will be a JSON object of the form ({"token":"tokenvalue"}) and of the form:- 
+{
+    "non_field_errors": [
+        "Unable to log in with provided credentials."
+    ]
+}  if the given username and password do not exist.
