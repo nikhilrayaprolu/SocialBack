@@ -29,18 +29,24 @@ class Organization(models.Model):
         through='UserOrganizationMapping',
         related_name="organizations"
     )
+    def __str__(self):
+        return self.short_name
 
 class UserOrganizationMapping(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization,on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     is_amc_admin = models.BooleanField(default=False)
+    def __str__(self):
+        return self.organization + ' ' + self.user
 
 
 
 class Page(models.Model):
     pageid = models.CharField(max_length=20, primary_key=True)
     ownertype = models.CharField(max_length=50)
+    def __str__(self):
+        return self.pageid
 
 
 class School(models.Model):
@@ -54,6 +60,8 @@ class School(models.Model):
     board = models.CharField(max_length=20, blank=True, null=True)
     schoollogo = models.ImageField(blank=True, upload_to='school_logo', default='school_logo/no-image.jpg')
     page_id = models.ForeignKey(Page, null=True, blank=True, related_name="school",on_delete=models.CASCADE)
+    def __str__(self):
+        return self.schoolname
 
 
 class Class(models.Model):
@@ -61,12 +69,16 @@ class Class(models.Model):
     class_level = models.CharField(max_length=5)
     display_name = models.CharField(max_length=10)
     num_sections = models.IntegerField(default=0)
+    def __str__(self):
+        return self.class_level + ' ' + self.organization.short_name
 
 
 class Section(models.Model):
     section_class = models.ForeignKey(Class,on_delete=models.CASCADE)
     section_name = models.CharField(max_length=5)
     description = models.CharField(max_length=200, blank=True, null=True)
+    def __str__(self):
+        return self.section_name + ' ' + self.section_class.display_name
 
 
 class Course(models.Model):
@@ -81,6 +93,8 @@ class Course(models.Model):
     course_id = models.CharField(max_length=80)
     course_status = models.CharField(max_length=3)
     page_id = models.ForeignKey(Page, null=True, blank=True, related_name="course",on_delete=models.CASCADE)
+    def __str__(self):
+        return self.course_name
 
 
 
@@ -95,19 +109,26 @@ class UserMiniProfile(models.Model):
     is_staff = models.BooleanField(blank=True)
     school = models.ForeignKey(School, blank=True, null=True,on_delete=models.CASCADE)
     page_id = models.ForeignKey(Page, null=True, blank=True, related_name="user",on_delete=models.CASCADE)
+    def __str__(self):
+        return self.first_name + ' ' + self.last_name
+
 
 
 class UserSectionMapping(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     section = models.ForeignKey(Section,on_delete=models.CASCADE)
+    def __str__(self):
+        return self.user.username + ' ' + self.section.section_name
 
 class Group(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)
     page_id = models.ForeignKey(Page, null=True, blank=True, related_name="group",on_delete=models.CASCADE)
 
+
 class Follow(models.Model):
     from_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='from_follow')
     to_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='to_follow')
+
 
 
 class Feed(models.Model):
