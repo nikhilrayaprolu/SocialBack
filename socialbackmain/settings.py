@@ -26,7 +26,7 @@ SECRET_KEY = '5irm392m2sx$55q1o^+^8dr#fg5(3jcrz84!-k())tf)ntr*qm'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    *,
+    "*",
     "socialback-stage.herokuapp.com"
 ]
 
