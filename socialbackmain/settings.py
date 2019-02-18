@@ -25,7 +25,10 @@ SECRET_KEY = '5irm392m2sx$55q1o^+^8dr#fg5(3jcrz84!-k())tf)ntr*qm'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    *,
+    "socialback-stage.herokuapp.com"
+]
 
 
 # Application definition
