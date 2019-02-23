@@ -131,7 +131,7 @@ class Follow(models.Model):
 
 
 
-class Feed(models.Model):
+class Feed(models.Model, ):
     from_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='from_page')
     to_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='to_page')
     feed_type = models.CharField(max_length=30)

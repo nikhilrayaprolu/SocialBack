@@ -1,0 +1,26 @@
+{% load render_bundle from webpack_loader %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Django React Webpack</title>
+    <!-- Webpack rendered CSS -->
+    {% render_bundle 'main' 'css' %}
+</head>
+<style>
+
+    body {padding: 32px; background: lightgrey;} #react-app { width: 676px; margin: 0 auto; }
+
+</style>
+<body>
+    <div id="react-app"></div>
+    <!-- Webpack rendered JS -->
+    {% render_bundle 'main' 'js' %}
+    <script type="application/javascript">
+        window.USER_TOKEN = "{{ user_token }}"
+        window.appId = "{{ appId }}"
+        window.apiKey = "{{ apiKey }}"
+    </script>
+
+</body>
+</html>

@@ -43,8 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'stream_django',
+    'webpack_loader'
 
 ]
+STREAM_API_KEY = 'ed97ces2ru44'
+STREAM_API_SECRET = 'dkdd2xh9ah4ezk2m3x7g7n59xq85wmvp367vgvgcunzad8fyndmdrw4sppux6ppt'
+STREAM_APP_ID = '48327'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -136,10 +141,19 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'assets'),
 )
 
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
 
 }
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'dist/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+    }
+}
+LOGIN_REDIRECT_URL = '/'
+
