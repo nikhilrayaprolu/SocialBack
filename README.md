@@ -15,6 +15,11 @@ While contributing make a new branch in the same repository and push the new bra
 - Create virtual environment using virtualenv and install the requirements: `pip install -r requirements.txt`
 - Run `python manage.py migrate`
 - Run `python manage.py createsuperuser` to create a new admin. Fill in the prompts next for admin creation.
+- Run `python manage.py loaddata testdata.json` to load dummy data into server
+- Run `npm install` to install frontend requirements
+- Run `npm run start` to compile the react application, this creates `dist`
+in `assets` directory which will be used by django templates to display the react components
+- Or you can run `npm run watch` which autocompiles for each change in the frontend.
 - Run `python manage.py runserver` to run the server on `127.0.0.1:8000/`
 - Go to `127.0.0.1:8000/admin` and login to access admin page. You can check out models and related fields here.
 
@@ -38,3 +43,8 @@ While contributing make a new branch in the same repository and push the new bra
         "Unable to log in with provided credentials."
     ]
 }  if the given username and password do not exist.
+
+###Reference:
+- https://medium.com/labcodes/configuring-django-with-react-4c599d1eae63
+- https://owais.lone.pw/blog/webpack-plus-reactjs-and-django/ 
+- https://edx-document.readthedocs.io/en/latest/user_interface_development.html
