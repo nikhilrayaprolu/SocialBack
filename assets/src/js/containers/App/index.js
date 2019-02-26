@@ -1,39 +1,28 @@
 import React from 'react';
-import Title from '../../components/Title';
 import { StreamApp, NotificationDropdown, FlatFeed, LikeButton, Activity, CommentList, CommentField, StatusUpdateForm} from 'react-activity-feed';
 import 'react-activity-feed/dist/index.css';
-
+import Home from '../../components/Home'
+import Feed from '../../components/Feed'
+import Group from '../../components/Group'
+import {Route, Switch} from "react-router-dom";
 
 class App extends React.Component {
   render () {
     const text = 'Django + React + Webpack + Babel = Awesome App';
+    console.log(window.apiKey)
     return (
       <StreamApp
-        apiKey="jkmk5yczhm7d"
-        appId="48329"
-        token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidXNlci1vbmUifQ.OT6TSv8GXRm-O7Qx7sFQZ-ScxJxEfzLzJc6znN6ufYY"
+        apiKey= {window.apiKey}
+        appId= {window.appId}
+        token= {window.USER_TOKEN}
       >
         <NotificationDropdown notify/>
-        <StatusUpdateForm
-          feedGroup="timeline"
-          userId="user-one" />
-         <FlatFeed
-          options={{reactions: { recent: true } }}
-          notify
-          Activity={(props) =>
-              <Activity {...props}
-                Footer={() => (
-                  <div style={ {padding: '8px 16px'} }>
-                    <LikeButton {...props} />
-                    <CommentField
-                      activity={props.activity}
-                      onAddReaction={props.onAddReaction} />
-                    <CommentList activityId={props.activity.id} />
-                  </div>
-                )}
-              />
-            }
-          />
+        <Switch>
+        <Route exact path='/' component={Home}/>
+          <Route path='/group/:groupid' component={Group}/>
+          <Route path='/:userid' component={Feed}/>
+
+      </Switch>
       </StreamApp>
 
     )

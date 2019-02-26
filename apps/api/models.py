@@ -15,7 +15,8 @@ class Organization(models.Model):
     short_name = models.CharField(
         max_length=255, db_index=True, verbose_name='Short Name',
         help_text='Please do not use spaces or special characters. Only allowed special characters '
-                    'are period (.), hyphen (-) and underscore (_).'
+                    'are period (.), hyphen (-) and underscore (_).',
+        primary_key=True
     )
     description = models.TextField(null=True, blank=True)
     logo = models.ImageField(
@@ -50,7 +51,7 @@ class Page(models.Model):
 
 
 class School(models.Model):
-    organization = models.OneToOneField(Organization, related_name='school_profile',on_delete=models.CASCADE)
+    organization = models.OneToOneField(Organization, related_name='school_profile',on_delete=models.CASCADE, primary_key=True)
     schoolname = models.CharField(max_length=50, blank=True, null=True)
     principal = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
@@ -60,6 +61,7 @@ class School(models.Model):
     board = models.CharField(max_length=20, blank=True, null=True)
     schoollogo = models.ImageField(blank=True, upload_to='school_logo', default='school_logo/no-image.jpg')
     page_id = models.ForeignKey(Page, null=True, blank=True, related_name="school",on_delete=models.CASCADE)
+    school_feed = models.BooleanField(default=False)
     def __str__(self):
         return self.schoolname
 
@@ -90,7 +92,7 @@ class Course(models.Model):
     year = models.IntegerField(default=2020)
     courseno = models.CharField(max_length=50)
     courserun = models.CharField(max_length=30)
-    course_id = models.CharField(max_length=80)
+    course_id = models.CharField(max_length=80, primary_key=True)
     course_status = models.CharField(max_length=3)
     page_id = models.ForeignKey(Page, null=True, blank=True, related_name="course",on_delete=models.CASCADE)
     def __str__(self):
@@ -99,7 +101,7 @@ class Course(models.Model):
 
 
 class UserMiniProfile(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=40, blank=True, null=True)
     last_name = models.CharField(max_length=40, blank=True, null=True)
     gender = models.CharField(max_length=1, blank=True, null=True)
@@ -108,50 +110,42 @@ class UserMiniProfile(models.Model):
     birthday = models.DateField(blank=True, null=True)
     is_staff = models.BooleanField(blank=True)
     school = models.ForeignKey(School, blank=True, null=True,on_delete=models.CASCADE)
-    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="user",on_delete=models.CASCADE)
+    page_id = models.OneToOneField(Page, null=True, blank=True, related_name="user",on_delete=models.CASCADE)
     def __str__(self):
         return self.first_name + ' ' + self.last_name
 
 
 
 class UserSectionMapping(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name='section')
     section = models.ForeignKey(Section,on_delete=models.CASCADE)
     def __str__(self):
         return self.user.username + ' ' + self.section.section_name
 
-class Group(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
-    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="group",on_delete=models.CASCADE)
+class FeedModerator(models.Model):
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='moderators')
+    moderator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='page_moderated')
 
+class GlobalGroup(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length= 400)
+    page_id = models.OneToOneField(Page, related_name="globalgroup", on_delete=models.CASCADE, primary_key=True)
+
+class SchoolGroup(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length= 400)
+    page_id = models.OneToOneField(Page, related_name="schoolgroup", on_delete=models.CASCADE, primary_key=True)
+    school = models.ForeignKey(School, blank=True, null=True, on_delete=models.CASCADE, related_name='school_groups')
+    globalgroup = models.ForeignKey(GlobalGroup, null=True, blank=True, related_name="schoolgroups")
+
+class CourseGroup(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length= 400)
+    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="coursegroup", on_delete=models.CASCADE)
+    school = models.ForeignKey(School, blank=True, null=True, on_delete=models.CASCADE, related_name='school_course_groups')
+    course_id = models.ForeignKey(Course, blank=True, null=True, on_delete=models.CASCADE, related_name='course_group')
 
 class Follow(models.Model):
     from_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='from_follow')
     to_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='to_follow')
-
-
-
-class Feed(models.Model, ):
-    from_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='from_page')
-    to_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='to_page')
-    feed_type = models.CharField(max_length=30)
-    created_time = models.DateTimeField(default=timezone.now)
-    updated_time = models.DateTimeField(default=timezone.now)
-    body = JSONField  # Supposed to be JSON Field
-
-
-class Like(models.Model):
-    from_page = models.ForeignKey(User, on_delete=models.CASCADE)
-    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
-
-
-class HashTag(models.Model):
-    hashtag = models.CharField(max_length=50)
-    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
-
-
-class Comment(models.Model):
-    comment = models.CharField(max_length=150)
-    time = models.DateTimeField(default=timezone.now)
-    feed_id = models.ForeignKey(Feed, on_delete=models.CASCADE)
-    page_id = models.ForeignKey(Page, null=True, blank=True,on_delete=models.CASCADE)
+    type_of_page = models.CharField(max_length=10)

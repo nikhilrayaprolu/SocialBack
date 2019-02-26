@@ -1,13 +1,22 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from apps.api.models import Organization, School, Class, Section, Course, UserMiniProfile, UserSectionMapping
+from .models import Organization, School, Class, Section, Course, UserMiniProfile, UserSectionMapping, Page, \
+    FeedModerator, GlobalGroup, Follow
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
         fields = ('id', 'name', 'short_name', 'edx_uuid')
+
+class FeedModeratorSerializer(serializers.ModelSerializer):
+    page = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all())
+    moderator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    class Meta:
+        model = FeedModerator
+        fields = '__all__'
+
 
 class SchoolSerializer(serializers.ModelSerializer):
     organization = serializers.SlugRelatedField(queryset=Organization.objects.all(), slug_field='name')
@@ -52,3 +61,39 @@ class UserSectionMappingSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserSectionMapping
         fields = '__all__'
+
+class GlobalGroupSerializer(serializers.ModelSerializer):
+    page_id = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all())
+    class Meta:
+        model = GlobalGroup
+        fields = '__all__'
+
+
+class SchoolGroupSerializer(serializers.ModelSerializer):
+    page_id = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all())
+    school = serializers.PrimaryKeyRelatedField(queryset=School.objects.all())
+    globalgroup = serializers.PrimaryKeyRelatedField(queryset=GlobalGroup.objects.all())
+    class Meta:
+        model = School
+        fields = '__all__'
+
+
+class CourseGroupSerializer(serializers.ModelSerializer):
+    page_id = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all())
+    school = serializers.PrimaryKeyRelatedField(queryset=School.objects.all())
+    cousre_id = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+    class Meta:
+        model = Course
+        fields = '__all__'
+
+class FollowSerializer(serializers.ModelSerializer):
+    from_page = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all())
+    to_page = serializers.PrimaryKeyRelatedField(queryset=Page.objects.all())
+    class Meta:
+        model = Follow
+        fields = '__all__'
+
+
+
+
+
