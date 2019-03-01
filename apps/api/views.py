@@ -1,5 +1,7 @@
+import json
+
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.template import loader
 from django.contrib.auth.models import User
 import datetime
@@ -41,10 +43,12 @@ def followalluserstotheirtimeline():
 def createuserobjects():
     users = UserMiniProfile.objects.all()
     for user in users:
-        client.users.add(
-            user.username,
-            {"name": user.first_name + ' ' + user.last_name},
-            get_or_create=True,
+
+        client.users.update(
+            user.user.username,
+            {"name": user.first_name + ' ' + user.last_name,
+             "profileImage": "http://www.gstatic.com/tv/thumb/persons/1083/1083_v9_ba.jpg"
+             },
         )
 
 @login_required
@@ -64,6 +68,19 @@ def groups(request):
     groupserializer = GlobalGroupSerializer(availablegroups)
     return Response(groupserializer.data,
                     status=200)
+
+
+def getfeed(request,feedgroup, userid):
+    print(request.POST)
+    if request.method == 'GET':
+        print("inside get")
+        return JsonResponse(client.feed(feedgroup, userid).get(**request.GET))
+    else:
+        print("insdie post")
+        print(request.body)
+        activity = json.loads(request.body.decode(encoding='UTF-8'))
+        return JsonResponse(client.feed(feedgroup, userid).add_activity(activity))
+
 
 
 
@@ -162,6 +179,7 @@ class AddFeedModerator(APIView):
         follows.append(pageobject)
         client.follow_many(follows)
         return Response(feedmoderatorserializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AddNewGlobalGroup(APIView):
     def post(self, request):

@@ -8,7 +8,7 @@ import {
 } from "react-activity-feed";
 class Feed extends React.Component {
     render () {
-        console.log("came into feed")
+        console.log("came into feed");
     return (
         <React.Fragment>
          <FlatFeed

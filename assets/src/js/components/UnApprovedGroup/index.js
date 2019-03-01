@@ -6,11 +6,10 @@ import {
     LikeButton,
     StatusUpdateForm,
 } from "react-activity-feed";
-class Group extends React.Component {
+class UnApprovedGroup extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props)
-        this.doupdaterequest = this.doupdaterequest.bind(this)
+        console.log("inside unapproved", this.props)
 
 
     }
@@ -38,39 +37,11 @@ class Group extends React.Component {
             return result.json()
         })
     }
-    doupdaterequest(params) {
-        console.log(params)
-        params['actor'] = params.actor.id
-        var url = new URL(window.location.origin+'/getfeed/'+'globalgroup'+'/'+ this.props.match.params.groupid);
-        console.log(url)
-        var csrftoken = this.getCookie('csrftoken');
-
-        return fetch(url, {
-            credentials: 'include',
-            headers: {
-                contentType: 'application/json; charset=utf-8',
-        'X-CSRFToken': csrftoken
-    },
-            method:"post",
-            body: JSON.stringify(params),
-
-        }).then(result =>{
-            console.log(result)
-            return result.json()
-        })
-    }
-
     render () {
         console.log("came into feed");
     return (
         <React.Fragment>
-        <StatusUpdateForm
-          feedGroup="globalgroup"
-          userId = { this.props.match.params.groupid }
-          doRequest = { this.doupdaterequest}
-        />
          <FlatFeed
-          options={{reactions: { recent: true } }}
           feedGroup = "globalgroup"
           userId = { this.props.match.params.groupid }
           doFeedRequest = {this.feedrequest}
@@ -78,11 +49,6 @@ class Group extends React.Component {
               <Activity {...props}
                 Footer={() => (
                   <div style={ {padding: '8px 16px'} }>
-                    <LikeButton {...props} />
-                    <CommentField
-                      activity={props.activity}
-                      onAddReaction={props.onAddReaction} />
-                    <CommentList activityId={props.activity.id} />
                   </div>
                 )}
               />
@@ -94,4 +60,4 @@ class Group extends React.Component {
     )
   }
 }
-export default Group
+export default UnApprovedGroup

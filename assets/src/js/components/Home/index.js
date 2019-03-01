@@ -6,7 +6,10 @@ import {
     LikeButton,
     StatusUpdateForm,
 } from "react-activity-feed";
+import {browserHistory} from 'react-router';
+import {withRouter} from "react-router-dom";
 class Home extends React.Component {
+
     render () {
         console.log("came into home")
     return (
@@ -19,6 +22,7 @@ class Home extends React.Component {
           notify
           Activity={(props) =>
               <Activity {...props}
+                  onClickUser = {(user) => {console.log(user);this.props.history.push(user.id)}}
                 Footer={() => (
                   <div style={ {padding: '8px 16px'} }>
                     <LikeButton {...props} />
@@ -37,4 +41,4 @@ class Home extends React.Component {
     )
   }
 }
-export default Home
+export default withRouter(Home)
