@@ -23,7 +23,7 @@ class App extends React.Component {
         <Route exact path='/' component={Home}/>
           <Route path='/group/:groupid' component={Group}/>
           <Route path='/unapprovedgroup/:groupid' component={UnApprovedGroup}/>
-          <Route path='/friends/:userid' component={Friends}/>
+          <Route path='/friends/' component={Friends}/>
           <Route path='/:userid' component={Feed}/>
       </Switch>
       </StreamApp>

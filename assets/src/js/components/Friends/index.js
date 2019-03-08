@@ -28,7 +28,7 @@ class Friends extends React.Component {
     }
 
     render () {
-        console.log("came into friends list: " + this.props.match.params.userid);
+        console.log("came into friends list");
         const { error, isLoaded, items } = this.state;
         if (error) {
             return <React.Fragment><div>Error: {error.message}</div></React.Fragment>;
