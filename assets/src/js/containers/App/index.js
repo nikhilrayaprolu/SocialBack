@@ -4,13 +4,14 @@ import 'react-activity-feed/dist/index.css';
 import Home from '../../components/Home'
 import Feed from '../../components/Feed'
 import Group from '../../components/Group'
+import Friends from '../../components/Friends'
 import {Route, Switch} from "react-router-dom";
 import UnApprovedGroup from "../../components/UnApprovedGroup";
 
 class App extends React.Component {
   render () {
     const text = 'Django + React + Webpack + Babel = Awesome App';
-    console.log(window.apiKey)
+    console.log(window.apiKey);
     return (
       <StreamApp
         apiKey= {window.apiKey}
@@ -22,8 +23,8 @@ class App extends React.Component {
         <Route exact path='/' component={Home}/>
           <Route path='/group/:groupid' component={Group}/>
           <Route path='/unapprovedgroup/:groupid' component={UnApprovedGroup}/>
+          <Route path='/friends/:userid' component={Friends}/>
           <Route path='/:userid' component={Feed}/>
-
       </Switch>
       </StreamApp>
 

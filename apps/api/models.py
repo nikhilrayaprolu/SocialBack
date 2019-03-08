@@ -76,7 +76,7 @@ class Class(models.Model):
 
 
 class Section(models.Model):
-    section_class = models.ForeignKey(Class,on_delete=models.CASCADE)
+    section_class = models.ForeignKey(Class, on_delete=models.CASCADE)
     section_name = models.CharField(max_length=5)
     description = models.CharField(max_length=200, blank=True, null=True)
     def __str__(self):
@@ -101,7 +101,7 @@ class Course(models.Model):
 
 
 class UserMiniProfile(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=40, blank=True, null=True)
     last_name = models.CharField(max_length=40, blank=True, null=True)
     gender = models.CharField(max_length=1, blank=True, null=True)
@@ -117,8 +117,8 @@ class UserMiniProfile(models.Model):
 
 
 class UserSectionMapping(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE, related_name='section')
-    section = models.ForeignKey(Section,on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='section')
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
     def __str__(self):
         return self.user.username + ' ' + self.section.section_name
 

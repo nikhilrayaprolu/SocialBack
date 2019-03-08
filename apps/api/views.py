@@ -9,10 +9,11 @@ import stream
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.http import JsonResponse
 
 from .serializers import UserMiniProfileSerializer, SchoolSerializer, FeedModeratorSerializer, FollowSerializer, \
     GlobalGroupSerializer
-from .models import Page, UserMiniProfile, School, GlobalGroup
+from .models import Page, UserMiniProfile, School, GlobalGroup, UserSectionMapping
 from django.conf import settings
 client = stream.connect(settings.STREAM_API_KEY, settings.STREAM_API_SECRET)
 
@@ -54,14 +55,27 @@ def createuserobjects():
 @login_required
 def friends(request):
     user = request.user
-    userclass = UserMiniProfile.objects.get(user = user).user.section.section.section_class
-    friends = UserMiniProfile.objects.filter(user__section__section__section_class=userclass)
+    userclass = UserMiniProfile.objects.get(user=user).user.section.section.section_class
+    friend_list = UserMiniProfile.objects.filter(user__section__section__section_class=userclass)
+    # friend_list = UserMiniProfile.objects.all()
+    response_data = []
+    for friend in friend_list:
+        section = UserSectionMapping.objects.get(user=user)
+        response_data.append({
+            "id": friend.pk,
+            "user": friend.user.username,
+            "name": friend.first_name + " " + friend.last_name,
+            "email": friend.email,
+            "birthday": friend.birthday,
+            "school": friend.school.schoolname,
+            "class": section.section.section_class.class_level,
+            "section": section.section.section_name
+        })
+    return JsonResponse(response_data, safe=False)
 
-    context = {
-        'friends': friends,
-    }
-    template = loader.get_template('frontend/friends.html')
-    return HttpResponse(template.render(context, request))
+@login_required
+def me(request):
+    return JsonResponse(request.user.username, safe=False)
 
 def groups(request):
     availablegroups = GlobalGroup.objects.all()
