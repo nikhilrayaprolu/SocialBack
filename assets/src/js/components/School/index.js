@@ -61,7 +61,7 @@ class Group extends React.Component {
     }
 
     render () {
-        console.log("came into group feeed");
+        console.log("came into feed");
     return (
         <React.Fragment>
         <StatusUpdateForm

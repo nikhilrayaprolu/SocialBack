@@ -72,7 +72,7 @@ class Class(models.Model):
     display_name = models.CharField(max_length=10)
     num_sections = models.IntegerField(default=0)
     def __str__(self):
-        return self.class_level + ' ' + self.organization.short_name
+        return self.class_level
 
 
 class Section(models.Model):
@@ -101,7 +101,7 @@ class Course(models.Model):
 
 
 class UserMiniProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='mini_user_profile', primary_key=True)
     first_name = models.CharField(max_length=40, blank=True, null=True)
     last_name = models.CharField(max_length=40, blank=True, null=True)
     gender = models.CharField(max_length=1, blank=True, null=True)

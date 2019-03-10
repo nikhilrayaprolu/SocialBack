@@ -93,6 +93,16 @@ class FollowSerializer(serializers.ModelSerializer):
         model = Follow
         fields = '__all__'
 
+class FriendSerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
+    email = serializers.EmailField()
+    birthday = serializers.DateField()
+    username = serializers.CharField()
+    schoolname = serializers.CharField()
+    classname = serializers.CharField()
+    section = serializers.CharField()
+    name = serializers.CharField()
+
 
 
 

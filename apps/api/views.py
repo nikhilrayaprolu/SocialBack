@@ -1,6 +1,9 @@
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
+from django.db.models import F, Value
+from django.db.models.functions import Concat
 from django.http import HttpResponse, Http404, JsonResponse
 from django.template import loader
 from django.contrib.auth.models import User
@@ -12,7 +15,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 
 from .serializers import UserMiniProfileSerializer, SchoolSerializer, FeedModeratorSerializer, FollowSerializer, \
-    GlobalGroupSerializer
+    GlobalGroupSerializer, FriendSerializer
 from .models import Page, UserMiniProfile, School, GlobalGroup, UserSectionMapping
 from django.conf import settings
 client = stream.connect(settings.STREAM_API_KEY, settings.STREAM_API_SECRET)
@@ -56,22 +59,14 @@ def createuserobjects():
 def friends(request):
     user = request.user
     userclass = UserMiniProfile.objects.get(user=user).user.section.section.section_class
-    friend_list = UserMiniProfile.objects.filter(user__section__section__section_class=userclass)
-    # friend_list = UserMiniProfile.objects.all()
-    response_data = []
-    for friend in friend_list:
-        section = UserSectionMapping.objects.get(user=user)
-        response_data.append({
-            "id": friend.pk,
-            "user": friend.user.username,
-            "name": friend.first_name + " " + friend.last_name,
-            "email": friend.email,
-            "birthday": friend.birthday,
-            "school": friend.school.schoolname,
-            "class": section.section.section_class.class_level,
-            "section": section.section.section_name
-        })
-    return JsonResponse(response_data, safe=False)
+    friend_list = UserMiniProfile.objects.annotate(
+        username=F('user__username'),schoolname=F('school__schoolname'),name=Concat(F('first_name') ,Value(' '), F('last_name')),
+        classname=F('user__section__section__section_class__class_level'), section=F('user__section__section__section_name'))\
+        .values('pk','email','birthday','username','schoolname','classname','section','name')\
+        .filter(user__section__section__section_class=userclass)
+    friend_list_serializer = FriendSerializer(friend_list, many=True)
+    return JsonResponse({"friends":friend_list_serializer.data, "userid": user.username}, safe=False)
+
 
 @login_required
 def me(request):
@@ -123,14 +118,16 @@ class ClassStudentList(APIView):
 
 class Follow(APIView):
     def post(self, request):
-        new_follow_serializer = FollowSerializer(request.data)
+        print(request.data)
+        new_follow_serializer = FollowSerializer(data=request.data)
         if new_follow_serializer.is_valid():
             new_follow_serializer.save()
-            from_page = client.feed('timeline', request.data.from_page)
-            from_page.follow(request.data.type_of_page, request.data.to_page)
+            from_page = client.feed('timeline', request.data['from_page'])
+            from_page.follow(request.data['type_of_page'], request.data['to_page'])
             return Response(new_follow_serializer.data,
                             status=200)
         return Response(new_follow_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 

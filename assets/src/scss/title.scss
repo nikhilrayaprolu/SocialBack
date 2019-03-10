@@ -1,3 +1,16 @@
 .title {
   color: red;
 }
+.shadow {
+  box-shadow: 0px 0px 5px 0px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: white;
+}
+hr {
+    margin: 20px 0;
+    border: 1px solid;
+}
+
+body {background: #ededed !important; }
