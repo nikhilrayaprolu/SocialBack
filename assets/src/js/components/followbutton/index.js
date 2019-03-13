@@ -16,12 +16,12 @@ export default class FollowButton extends React.Component {
     return (
       <div
         className={`raf-follow-button ${
-          followed ? 'raf-follow-button--active' : ''
+          this.state.followed ? 'raf-follow-button--active' : ''
         }`}
         role="button"
-        onClick={clicked}
+        onClick={()=>{clicked(); this.setState({followed: !this.state.followed})}}
       >
-        {followed ? 'Following' : 'Follow'}
+        {this.state.followed ? 'Following' : 'Follow'}
       </div>
     );
   }

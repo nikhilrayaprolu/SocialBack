@@ -9,6 +9,7 @@ class Friends extends React.Component {
             error: null,
             isLoaded: false,
             items: [],
+            non_friend_items: [],
             userid: null,
         };
     }
@@ -20,8 +21,11 @@ class Friends extends React.Component {
                     this.setState({
                         isLoaded: true,
                         items: result.friends,
+                        non_friend_items: result.non_friends,
                         userid: result.userid
                     });
+                    console.log(result.friends);
+                    console.log(result.non_friends);
                 },
                 (error) => {
                     this.setState({
@@ -73,7 +77,7 @@ class Friends extends React.Component {
 
     render () {
         console.log("came into friends list");
-        const { error, isLoaded, items } = this.state;
+        const { error, isLoaded, items, non_friend_items } = this.state;
         if (error) {
             return <React.Fragment><div>Error: {error.message}</div></React.Fragment>;
         } else if (!isLoaded) {
@@ -99,7 +103,32 @@ class Friends extends React.Component {
                                             <p><a href="#">Section: {item.section}</a></p>
                                         </div>
                                             <div className="col-md-2">
-                                            <FollowButton clicked={() => this.handlefollow(item.username)}/>
+                                            <FollowButton followed={true} clicked={() => this.handlefollow(item.username)}/>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                        </React.Fragment>
+
+
+
+                    ))}
+                    {non_friend_items.map(item => (
+                        <React.Fragment>
+                                    <div className="col-md-12 border-bottom" key={item.pk}>
+                                        <div className="row">
+                                        <div className="col-md-2">
+                                            <img src="https://www.infrascan.net/demo/assets/img/avatar5.png"
+                                                 className="img-circle" width="60px" />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <h4><a href="#">{item.name} </a></h4>
+                                            <p><a href="#">School: {item.school}</a></p>
+                                            <p><a href="#">Class: {item.classname}</a></p>
+                                            <p><a href="#">Section: {item.section}</a></p>
+                                        </div>
+                                            <div className="col-md-2">
+                                            <FollowButton followed={false} clicked={() => this.handlefollow(item.username)}/>
                                             </div>
                                         </div>
 

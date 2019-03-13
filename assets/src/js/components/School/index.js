@@ -6,13 +6,36 @@ import {
     LikeButton,
     StatusUpdateForm,
 } from "react-activity-feed";
-class Group extends React.Component {
+class SchoolFeed extends React.Component {
     constructor(props) {
         super(props);
         console.log(this.props)
         this.doupdaterequest = this.doupdaterequest.bind(this)
-
-
+        this.state = {
+            error: null,
+            isLoaded: false,
+            ismoderator: false,
+        };
+    }
+    componentDidMount() {
+        console.log('calling the api');
+        var csrftoken = this.getCookie('csrftoken');
+        fetch("/api/moderator/"+this.props.match.params.schoolid)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        isLoaded: true,
+                        ismoderator: result.ismoderator
+                    });
+                },
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    })
+                }
+            )
     }
     getCookie(name) {
     var cookieValue = null;
@@ -41,7 +64,7 @@ class Group extends React.Component {
     doupdaterequest(params) {
         console.log(params)
         params['actor'] = params.actor.id
-        var url = new URL(window.location.origin+'/getfeed/'+'globalgroup'+'/'+ this.props.match.params.groupid);
+        var url = new URL(window.location.origin+'/getfeed/'+'school'+'/'+ this.props.match.params.schoolid);
         console.log(url)
         var csrftoken = this.getCookie('csrftoken');
 
@@ -62,17 +85,22 @@ class Group extends React.Component {
 
     render () {
         console.log("came into feed");
-    return (
-        <React.Fragment>
-        <StatusUpdateForm
-          feedGroup="globalgroup"
-          userId = { this.props.match.params.groupid }
+        let statusform = null;
+        if (this.state.ismoderator){
+            statusform = <StatusUpdateForm
+          feedGroup="school"
+          userId = { this.props.match.params.schoolid }
           doRequest = { this.doupdaterequest}
         />
+
+        }
+    return (
+        <React.Fragment>
+            {statusform}
          <FlatFeed
           options={{reactions: { recent: true } }}
-          feedGroup = "globalgroup"
-          userId = { this.props.match.params.groupid }
+          feedGroup = "school"
+          userId = { this.props.match.params.schoolid }
           doFeedRequest = {this.feedrequest}
           Activity={(props) =>
               <Activity {...props}
@@ -94,4 +122,4 @@ class Group extends React.Component {
     )
   }
 }
-export default Group
+export default SchoolFeed

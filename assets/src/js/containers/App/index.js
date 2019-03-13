@@ -7,6 +7,7 @@ import Group from '../../components/Group'
 import Friends from '../../components/Friends'
 import {Route, Switch} from "react-router-dom";
 import UnApprovedGroup from "../../components/UnApprovedGroup";
+import SchoolFeed from "../../components/School";
 
 class App extends React.Component {
   render () {
@@ -24,7 +25,9 @@ class App extends React.Component {
           <Route path='/group/:groupid' component={Group}/>
           <Route path='/unapprovedgroup/:groupid' component={UnApprovedGroup}/>
           <Route path='/friends/' component={Friends}/>
+          <Route path='/school/:schoolid' component={SchoolFeed}/>
           <Route path='/:userid' component={Feed}/>
+
       </Switch>
       </StreamApp>
 

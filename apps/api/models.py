@@ -30,6 +30,9 @@ class Organization(models.Model):
         through='UserOrganizationMapping',
         related_name="organizations"
     )
+
+    def natural_key(self):
+        return (self.short_name,)
     def __str__(self):
         return self.short_name
 
