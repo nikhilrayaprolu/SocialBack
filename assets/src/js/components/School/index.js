@@ -6,20 +6,21 @@ import {
     LikeButton,
     StatusUpdateForm,
 } from "react-activity-feed";
+import {doupdaterequest, feedrequest, getCookie} from "../../utils";
 class SchoolFeed extends React.Component {
     constructor(props) {
         super(props);
-        console.log(this.props)
-        this.doupdaterequest = this.doupdaterequest.bind(this)
+        this.doupdaterequest = this.doupdaterequest.bind(this);
         this.state = {
             error: null,
             isLoaded: false,
             ismoderator: false,
         };
+        this.feedid = this.props.match.params.schoolid;
+        this.feedgroup = "school"
     }
     componentDidMount() {
-        console.log('calling the api');
-        var csrftoken = this.getCookie('csrftoken');
+        var csrftoken = getCookie('csrftoken');
         fetch("/api/moderator/"+this.props.match.params.schoolid)
             .then(res => res.json())
             .then(
@@ -37,50 +38,8 @@ class SchoolFeed extends React.Component {
                 }
             )
     }
-    getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-    }
-    feedrequest(client, feedGroup, userId, options) {
-        var url = new URL(window.location.origin+'/getfeed/'+feedGroup+'/'+userId);
-        delete options['reactions'];
-        url.search = new URLSearchParams(options)
-        console.log(url)
-        return fetch(url).then(result =>{
-            console.log(result)
-            return result.json()
-        })
-    }
     doupdaterequest(params) {
-        console.log(params)
-        params['actor'] = params.actor.id
-        var url = new URL(window.location.origin+'/getfeed/'+'school'+'/'+ this.props.match.params.schoolid);
-        console.log(url)
-        var csrftoken = this.getCookie('csrftoken');
-
-        return fetch(url, {
-            credentials: 'include',
-            headers: {
-                contentType: 'application/json; charset=utf-8',
-        'X-CSRFToken': csrftoken
-    },
-            method:"post",
-            body: JSON.stringify(params),
-
-        }).then(result =>{
-            console.log(result)
-            return result.json()
-        })
+            doupdaterequest(params, this.feedgroup, this.feedid)
     }
 
     render () {
@@ -88,8 +47,8 @@ class SchoolFeed extends React.Component {
         let statusform = null;
         if (this.state.ismoderator){
             statusform = <StatusUpdateForm
-          feedGroup="school"
-          userId = { this.props.match.params.schoolid }
+          feedGroup={this.feedgroup}
+          userId = { this.feedid }
           doRequest = { this.doupdaterequest}
         />
 
@@ -99,9 +58,9 @@ class SchoolFeed extends React.Component {
             {statusform}
          <FlatFeed
           options={{reactions: { recent: true } }}
-          feedGroup = "school"
-          userId = { this.props.match.params.schoolid }
-          doFeedRequest = {this.feedrequest}
+          feedGroup = {this.feedgroup}
+          userId = { this.feedid }
+          doFeedRequest = {feedrequest}
           Activity={(props) =>
               <Activity {...props}
                 Footer={() => (
@@ -116,7 +75,6 @@ class SchoolFeed extends React.Component {
               />
             }
           />
-
             </React.Fragment>
 
     )

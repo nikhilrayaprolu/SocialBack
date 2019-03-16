@@ -49,10 +49,22 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class UserMiniProfileSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    school = serializers.PrimaryKeyRelatedField(queryset=School.objects.all())
 
     class Meta:
         model = UserMiniProfile
         fields = '__all__'
+
+class UserMiniReadOnlyProfileSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    school = serializers.SlugRelatedField(read_only=True,
+                                          source='school.page_id',
+        slug_field='pageid')
+
+    class Meta:
+        model = UserMiniProfile
+        fields = '__all__'
+
 
 class UserSectionMappingSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())

@@ -1,5 +1,6 @@
 import React from 'react';
 import FollowButton from "../followbutton";
+import {handlefollow} from "../../utils";
 
 
 class Friends extends React.Component {
@@ -24,8 +25,6 @@ class Friends extends React.Component {
                         non_friend_items: result.non_friends,
                         userid: result.userid
                     });
-                    console.log(result.friends);
-                    console.log(result.non_friends);
                 },
                 (error) => {
                     this.setState({
@@ -35,115 +34,53 @@ class Friends extends React.Component {
                 }
             )
     }
-    getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-    }
     handlefollow(id) {
-        var csrftoken = this.getCookie('csrftoken');
-        var params =  {
-            from_page: this.state.userid,
-            to_page: id,
-            type_of_page: 'user'
-        };
-        fetch("/api/follow/",{
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8',
-        'X-CSRFToken': csrftoken
-    },
-            method:"post",
-            body: JSON.stringify(params),
-
-        })
-            .then(res => res.json())
-            .then((result) => {
-                console.log(result)
-            },
-                (error) => {
-                console.log(error)
-                })
+        handlefollow(this.state.userid, id, 'user');
     }
+    displayitem(item, follow) {
+        return (
+            <div className="col-md-12 border-bottom" key={item.pk}>
+                <div className="row">
+                    <div className="col-md-2">
+                        <img src="https://www.infrascan.net/demo/assets/img/avatar5.png"
+                             className="img-circle" width="60px" />
+                    </div>
+                    <div className="col-md-6">
+                        <h4><a href="#">{item.name} </a></h4>
+                        <p><a href="#">School: {item.school}</a></p>
+                        <p><a href="#">Class: {item.classname}</a></p>
+                        <p><a href="#">Section: {item.section}</a></p>
+                    </div>
+                    <div className="col-md-2">
+                        <FollowButton followed={follow} clicked={() => this.handlefollow(item.username)}/>
+                    </div>
+                </div>
 
+            </div>
+        )
+    }
     render () {
-        console.log("came into friends list");
         const { error, isLoaded, items, non_friend_items } = this.state;
         if (error) {
             return <React.Fragment><div>Error: {error.message}</div></React.Fragment>;
         } else if (!isLoaded) {
             return <React.Fragment><div>Loading...</div></React.Fragment>;
         } else {
-          return (
-            <React.Fragment>
-                <div className="container">
-                    <div className="shadow">
-                    <div className="row">
-                    {items.map(item => (
-                        <React.Fragment>
-                                    <div className="col-md-12 border-bottom" key={item.pk}>
-                                        <div className="row">
-                                        <div className="col-md-2">
-                                            <img src="https://www.infrascan.net/demo/assets/img/avatar5.png"
-                                                 className="img-circle" width="60px" />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <h4><a href="#">{item.name} </a></h4>
-                                            <p><a href="#">School: {item.school}</a></p>
-                                            <p><a href="#">Class: {item.classname}</a></p>
-                                            <p><a href="#">Section: {item.section}</a></p>
-                                        </div>
-                                            <div className="col-md-2">
-                                            <FollowButton followed={true} clicked={() => this.handlefollow(item.username)}/>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                        </React.Fragment>
-
-
-
-                    ))}
-                    {non_friend_items.map(item => (
-                        <React.Fragment>
-                                    <div className="col-md-12 border-bottom" key={item.pk}>
-                                        <div className="row">
-                                        <div className="col-md-2">
-                                            <img src="https://www.infrascan.net/demo/assets/img/avatar5.png"
-                                                 className="img-circle" width="60px" />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <h4><a href="#">{item.name} </a></h4>
-                                            <p><a href="#">School: {item.school}</a></p>
-                                            <p><a href="#">Class: {item.classname}</a></p>
-                                            <p><a href="#">Section: {item.section}</a></p>
-                                        </div>
-                                            <div className="col-md-2">
-                                            <FollowButton followed={false} clicked={() => this.handlefollow(item.username)}/>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                        </React.Fragment>
-
-
-
-                    ))}
-                          </div>
+            return (
+                    <div className="container" id="react-feed">
+                        <div className="shadow">
+                            <div className="row">
+                                {
+                                    items.map(item => this.displayitem(item, true))
+                                }
+                                {
+                                    non_friend_items.map(item => this.displayitem(item, false))
+                                }
                             </div>
                         </div>
-            </React.Fragment>
-          );
+                    </div>
+            );
         }
-      }
+    }
 }
 export default Friends

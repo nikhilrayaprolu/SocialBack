@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 
 from .serializers import UserMiniProfileSerializer, SchoolSerializer, FeedModeratorSerializer, FollowSerializer, \
-    GlobalGroupSerializer, FriendSerializer
+    GlobalGroupSerializer, FriendSerializer, UserMiniReadOnlyProfileSerializer
 from .models import Page, UserMiniProfile, School, GlobalGroup, UserSectionMapping, Follow, FeedModerator
 from django.conf import settings
 client = stream.connect(settings.STREAM_API_KEY, settings.STREAM_API_SECRET)
@@ -124,18 +124,33 @@ class ClassStudentList(APIView):
                         status=200)
 
 class isModerator(APIView):
+    def get_follow(self, from_page, to_page):
+        followtable = Follow.objects.filter(from_page = from_page, to_page= to_page)
+        return followtable
+
     def get(self, request, feedgroup):
         print(request.user)
+        user_mini_profile = UserMiniReadOnlyProfileSerializer(request.user.mini_user_profile)
+        group_object = GlobalGroup.objects.get(page_id=feedgroup)
+        group_details = GlobalGroupSerializer(group_object)
+        follow_relation = self.get_follow(request.user.mini_user_profile.page_id, feedgroup)
+        print(follow_relation)
+        following = False
+        if follow_relation:
+            following = True
+
+
+        print(group_details.data)
         try:
             moderator = FeedModerator.objects.get(page=feedgroup, moderator=request.user)
             if moderator:
-                return Response({'ismoderator': True},
+                return Response({'ismoderator': True, 'user_profile': user_mini_profile.data, 'group_details': group_details.data, 'following': following},
                                 status=200)
             else:
-                return Response({'ismoderator': False},
+                return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details.data, 'following': following},
                                 status=200)
         except FeedModerator.DoesNotExist:
-            return Response({'ismoderator': False},
+            return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details.data, 'following': following},
                             status=200)
 
 class ApproveFeed(APIView):
@@ -180,21 +195,22 @@ class FollowApi(APIView):
     def post(self, request):
         print(request.data)
         follow_relation = self.get_follow(request.data['from_page'], request.data['to_page'])
+        print(follow_relation)
         if follow_relation:
             follow_relation.delete()
             from_page = client.feed('timeline', request.data['from_page'])
             from_page.unfollow(request.data['type_of_page'], request.data['to_page'])
             return Response({'status':'delete successful'},
                             status=200)
-
-        new_follow_serializer = FollowSerializer(data=request.data)
-        if new_follow_serializer.is_valid():
-            new_follow_serializer.save()
-            from_page = client.feed('timeline', request.data['from_page'])
-            from_page.follow(request.data['type_of_page'], request.data['to_page'])
-            return Response(new_follow_serializer.data,
-                            status=200)
-        return Response(new_follow_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            new_follow_serializer = FollowSerializer(data=request.data)
+            if new_follow_serializer.is_valid():
+                new_follow_serializer.save()
+                from_page = client.feed('timeline', request.data['from_page'])
+                from_page.follow(request.data['type_of_page'], request.data['to_page'])
+                return Response(new_follow_serializer.data,
+                                status=200)
+            return Response(new_follow_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

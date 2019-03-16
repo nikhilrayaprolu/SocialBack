@@ -151,4 +151,4 @@ class CourseGroup(models.Model):
 class Follow(models.Model):
     from_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='from_follow')
     to_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='to_follow')
-    type_of_page = models.CharField(max_length=10)
+    type_of_page = models.CharField(max_length=20)
