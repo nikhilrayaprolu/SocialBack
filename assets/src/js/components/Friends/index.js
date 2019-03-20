@@ -108,7 +108,7 @@ export default class Friends extends React.Component {
         if (error) {
             return <React.Fragment><div>Error: {error.message}</div></React.Fragment>;
         } else if (!isLoaded) {
-            return <React.Fragment><div>Loading...</div></React.Fragment>;
+            return <React.Fragment><div className="container" id="react-feed"><h2>Loading...</h2></div></React.Fragment>;
         } else {
             return (
                     <div className="container" id="react-feed">
