@@ -156,7 +156,6 @@ export default class Friends extends React.Component {
                                 {
                                     items.map(item => this.displayitem(item, true))
                                 }
-                                <hr />
                                 {
                                     non_friend_items.map(item => this.displayitem(item, false))
                                 }
