@@ -115,11 +115,10 @@ export default class Friends extends React.Component {
                         <div className="searchbar">
                             <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
-                                    {/*<label for="school">School:</label>*/}
                                     <input type="text" className="form-control" placeholder="Enter School" value={this.state.school} onChange={this.handleChangeschool} />
                                 </div>
-                                <div className="col-md-12" style={{padding: '0'}}>
-                                    <div className="form-group col-md-6" style={{display: 'inline-block'}}>
+                                <div className="select-container">
+                                    <div className="form-group">
                                         <label htmlFor="class">Class:</label>
                                         <select className="form-control" value={this.state.classLevel} onChange={this.handleChangeclass}>
                                             <option value="">All</option>
@@ -128,7 +127,7 @@ export default class Friends extends React.Component {
                                             <option value="3">3</option>
                                         </select>
                                     </div>
-                                    <div className="form-group col-md-6" style={{display: 'inline-block'}}>
+                                    <div className="form-group">
                                         <label htmlFor="section">Section:</label>
                                         <select className="form-control" value={this.state.section} onChange={this.handleChangesection}>
                                             <option value="">All</option>
@@ -137,7 +136,9 @@ export default class Friends extends React.Component {
                                         </select>
                                     </div>
                                 </div>
-                                <button type="submit" value="Submit" className="btn btn-primary col-md-12" style={{marginBottom: '20px'}}>Search</button>
+                                <div className="button-container">
+                                    <button type="submit" value="Submit" className="btn btn-primary">Search</button>
+                                </div>
                             </form>
                         </div>
                         <div className="shadow">
