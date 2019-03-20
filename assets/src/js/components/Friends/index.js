@@ -93,14 +93,16 @@ export default class Friends extends React.Component {
             <div className="col-md-12 border-bottom" key={item.pk}>
                 <div className="row">
                     <div className="col-md-2">
+                        <a href={"/" + item.username}>
                         <img src="https://www.infrascan.net/demo/assets/img/avatar5.png"
-                             className="img-circle" width="60px" />
+                             alt="User profile picture" className="img-circle" width="60px" />
+                        </a>
                     </div>
                     <div className="col-md-6">
-                        <h4><a href="#">{item.name} </a></h4>
-                        <p><a href="#">School: {item.schoolname}</a></p>
-                        <p><a href="#">Class: {item.classname}</a></p>
-                        <p><a href="#">Section: {item.section}</a></p>
+                        <h4><a href={"/" + item.username}>{item.name}</a></h4>
+                        <p>School: {item.schoolname}<br/>
+                        Class: {item.classname}<br/>
+                        Section: {item.section}</p>
                     </div>
                     <div className="col-md-2">
                         <FollowButton followed={follow} clicked={() => this.handlefollow(item.username)}/>
@@ -117,6 +119,14 @@ export default class Friends extends React.Component {
         } else if (!isLoaded) {
             return <React.Fragment><div className="container" id="react-feed"><h2>Loading...</h2></div></React.Fragment>;
         } else {
+            let friends = "";
+            let teachers = "";
+            if( items.filter(item => !item.is_staff).length!==0 ||  non_friend_items.filter(item => !item.is_staff).length!==0)
+                friends = "Friends";
+            if( items.filter(item => item.is_staff).length!==0 ||  non_friend_items.filter(item => item.is_staff).length!==0)
+                teachers = "Teachers";
+            if(items.length === 0 && non_friend_items.length === 0)
+                friends = "No results";
             return (
                     <div className="container" id="react-feed">
                         <div className="searchbar">
@@ -152,12 +162,22 @@ export default class Friends extends React.Component {
                             </form>
                         </div>
                         <div className="shadow">
+                            <h1>{friends}</h1>
                             <div className="row">
                                 {
-                                    items.map(item => this.displayitem(item, true))
+                                    items.filter(item => !item.is_staff).map(item => this.displayitem(item, true))
                                 }
                                 {
-                                    non_friend_items.map(item => this.displayitem(item, false))
+                                    non_friend_items.filter(item => !item.is_staff).map(item => this.displayitem(item, false))
+                                }
+                            </div>
+                            <h1>{teachers}</h1>
+                            <div className="row">
+                                {
+                                    items.filter(item => item.is_staff).map(item => this.displayitem(item, true))
+                                }
+                                {
+                                    non_friend_items.filter(item => item.is_staff).map(item => this.displayitem(item, false))
                                 }
                             </div>
                         </div>

@@ -69,14 +69,14 @@ def friends(request):
         name=Concat(F('first_name'), Value(' '), F('last_name')),
         classname=F('user__section__section__section_class__class_level'),
         section=F('user__section__section__section_name')) \
-        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name') \
+        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name', 'is_staff') \
         .filter(user__section__section__section_class=userclass, user__username__in=userfriends)
     non_friend_list = UserMiniProfile.objects.annotate(
         username=F('user__username'), schoolname=F('school__schoolname'),
         name=Concat(F('first_name'), Value(' '), F('last_name')),
         classname=F('user__section__section__section_class__class_level'),
         section=F('user__section__section__section_name')) \
-        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name') \
+        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name', 'is_staff') \
         .filter(user__section__section__section_class=userclass).exclude(user__username__in=userfriends)
 
     friend_list_serializer = FriendSerializer(friend_list, many=True)
@@ -113,7 +113,7 @@ def search(request):
         name=Concat(F('first_name'), Value(' '), F('last_name')),
         classname=F('user__section__section__section_class__class_level'),
         section=F('user__section__section__section_name')) \
-        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name') \
+        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name', 'is_staff') \
         .filter(**argument).exclude(user__username__in=user_friends)
 
     argument["user__username__in"] = user_friends
@@ -123,7 +123,7 @@ def search(request):
         name=Concat(F('first_name'), Value(' '), F('last_name')),
         classname=F('user__section__section__section_class__class_level'),
         section=F('user__section__section__section_name')) \
-        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name') \
+        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name', 'is_staff') \
         .filter(**argument)
 
     friend_list_serializer = FriendSerializer(friend_list, many=True)

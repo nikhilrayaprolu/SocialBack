@@ -114,6 +114,7 @@ class FriendSerializer(serializers.Serializer):
     classname = serializers.CharField()
     section = serializers.CharField()
     name = serializers.CharField()
+    is_staff = serializers.BooleanField()
 
 
 
