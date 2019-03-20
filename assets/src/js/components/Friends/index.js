@@ -12,6 +12,7 @@ export default class Friends extends React.Component {
             items: [],
             non_friend_items: [],
             userid: null,
+            username: "",
             school: "",
             classLevel: "",
             section: "",
@@ -20,6 +21,7 @@ export default class Friends extends React.Component {
         this.handleChangeschool = this.handleChangeschool.bind(this);
         this.handleChangeclass = this.handleChangeclass.bind(this);
         this.handleChangesection = this.handleChangesection.bind(this);
+        this.handleChangeuser = this.handleChangeuser.bind(this);
     }
     componentDidMount() {
         fetch("/api/friends")
@@ -49,7 +51,9 @@ export default class Friends extends React.Component {
         if(this.state.classLevel)
             q += "class=" + this.state.classLevel + "&";
         if(this.state.section)
-            q += "section=" + this.state.section;
+            q += "section=" + this.state.section + "&";
+        if(this.state.username)
+            q += "user=" + this.state.username;
         fetch(q)
             .then(res => res.json())
             .then(
@@ -77,6 +81,9 @@ export default class Friends extends React.Component {
     }
     handleChangesection(event) {
         this.setState({section: event.target.value});
+    }
+    handleChangeuser(event) {
+        this.setState({username: event.target.value});
     }
     handlefollow(id) {
         handlefollow(this.state.userid, id, 'user');
@@ -115,6 +122,9 @@ export default class Friends extends React.Component {
                         <div className="searchbar">
                             <form onSubmit={this.handleSubmit}>
                                 <div className="form-group">
+                                    <input type="text" className="form-control" placeholder="Enter Username" value={this.state.username} onChange={this.handleChangeuser} />
+                                </div>
+                                <div className="form-group">
                                     <input type="text" className="form-control" placeholder="Enter School" value={this.state.school} onChange={this.handleChangeschool} />
                                 </div>
                                 <div className="select-container">
@@ -137,7 +147,7 @@ export default class Friends extends React.Component {
                                     </div>
                                 </div>
                                 <div className="button-container">
-                                    <button type="submit" value="Submit" className="btn btn-primary">Search</button>
+                                    <button type="submit" value="Submit" className="btn btn-primary">Search friends</button>
                                 </div>
                             </form>
                         </div>
@@ -146,6 +156,7 @@ export default class Friends extends React.Component {
                                 {
                                     items.map(item => this.displayitem(item, true))
                                 }
+                                <hr />
                                 {
                                     non_friend_items.map(item => this.displayitem(item, false))
                                 }

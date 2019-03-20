@@ -90,6 +90,7 @@ def search(request):
     school_name = request.GET.get('school')
     section = request.GET.get('section')
     class_level = request.GET.get('class')
+    username = request.GET.get('user')
     user_friends = Follow.objects.filter(from_page=request.user.mini_user_profile.page_id).values_list('to_page')
 
     argument = {}
@@ -101,6 +102,11 @@ def search(request):
 
     if class_level:
         argument["user__section__section__section_class"] = class_level
+
+    if username:
+        argument["user__mini_user_profile__first_name__contains"] = username
+        argument["user__mini_user_profile__last_name__contains"] = username
+        argument["user__username__contains"] = username
 
     non_friend_list = UserMiniProfile.objects.annotate(
         username=F('user__username'), schoolname=F('school__schoolname'),
