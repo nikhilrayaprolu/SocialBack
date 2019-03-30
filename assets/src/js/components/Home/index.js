@@ -11,7 +11,7 @@ import {withRouter} from "react-router-dom";
 class Home extends React.Component {
 
     render () {
-        console.log("came into home")
+        console.log("came into home");
     return (
         <React.Fragment>
         <StatusUpdateForm
@@ -19,6 +19,7 @@ class Home extends React.Component {
         />
          <FlatFeed
           options={{reactions: { recent: true } }}
+          feedGroup = "user"
           notify
           Activity={(props) =>
               <Activity {...props}

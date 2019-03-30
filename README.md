@@ -30,21 +30,26 @@ in `assets` directory which will be used by django templates to display the reac
 - Auto-deployment for staging enabled.
 - Review apps enabled for reviewing pull requests.
 
-###JWT-Authentication
--JWT-Authentication implemented.
--The frontend will request from the url('http://127.0.0.1:8000/api-token-auth/') using post method only and give a JSON object of format :-
+### JWT-Authentication
+- JWT-Authentication implemented.
+- The frontend will request from the url('http://127.0.0.1:8000/api-token-auth/') using post method only and give a JSON object of format :-
+```
 {
     "username": "",
     "password": ""
 }
--The response will be a JSON object of the form ({"token":"tokenvalue"}) and of the form:- 
+```
+- The response will be a JSON object of the form (`{"token":"tokenvalue"}`) and of the form:- 
+```
 {
     "non_field_errors": [
         "Unable to log in with provided credentials."
     ]
-}  if the given username and password do not exist.
+}
+```
+if the given username and password do not exist.
 
-###Reference:
+### Reference:
 - https://medium.com/labcodes/configuring-django-with-react-4c599d1eae63
 - https://owais.lone.pw/blog/webpack-plus-reactjs-and-django/ 
 - https://edx-document.readthedocs.io/en/latest/user_interface_development.html

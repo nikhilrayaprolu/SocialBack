@@ -49,10 +49,22 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class UserMiniProfileSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    school = serializers.PrimaryKeyRelatedField(queryset=School.objects.all())
 
     class Meta:
         model = UserMiniProfile
         fields = '__all__'
+
+class UserMiniReadOnlyProfileSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    school = serializers.SlugRelatedField(read_only=True,
+                                          source='school.page_id',
+        slug_field='pageid')
+
+    class Meta:
+        model = UserMiniProfile
+        fields = '__all__'
+
 
 class UserSectionMappingSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
@@ -92,6 +104,17 @@ class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
         fields = '__all__'
+
+class FriendSerializer(serializers.Serializer):
+    pk = serializers.IntegerField()
+    email = serializers.EmailField()
+    birthday = serializers.DateField()
+    username = serializers.CharField()
+    schoolname = serializers.CharField()
+    classname = serializers.CharField()
+    section = serializers.CharField()
+    name = serializers.CharField()
+    is_staff = serializers.BooleanField()
 
 
 
