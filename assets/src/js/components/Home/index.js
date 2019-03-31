@@ -13,46 +13,42 @@ import Comment from "../Comment";
 class Home extends React.Component {
 
     render () {
-        return (
-            <React.Fragment>
-                <div id="react-feed">
-                <StatusUpdateForm
-                    feedGroup="user"
-                />
-                <FlatFeed
-                    options={{reactions: { recent: true } }}
-                    notify
-                    feedGroup="user"
-                    Activity={(props) => {
-                        return (
-                            <Activity {...props}
-                                      onClickUser = {(user) => {console.log(user);this.props.history.push(user.id)}}
-                                      Header={() => (
-                                          <UserBar {...props} />
-                                      )}
-                                      Footer={() => (
-                                          <div style={ {padding: '8px 16px'} }>
-                                              <LikeButton {...props} />
-                                              <CommentField
-                                                  activity={props.activity}
-                                                  onAddReaction={props.onAddReaction}
-                                              />
-                                              <CommentList
-                                                  activityId={props.activity.id}
-                                                  CommentItem={(text) => (
-                                                      <Comment text={text}/>
-                                                  )}
-                                              />
-                                          </div>
-                                      )}
-                            />
-                        )
-                    }}
-                />
-                </div>
-            </React.Fragment>
+        console.log("came into home");
+    return (
+        <React.Fragment>
+        <StatusUpdateForm
+          feedGroup="user"
+        />
+         <FlatFeed
+          options={{reactions: { recent: true } }}
+          notify
+          Activity={(props) =>
+              <Activity {...props}
+                  onClickUser = {(user) => {console.log(user);this.props.history.push(user.id)}}
+                    Header={() => (
+                                      <UserBar {...props} />
+                          )}
+                  Footer={() => (
+                      <div style={ {padding: '8px 16px'} }>
+                          <LikeButton {...props} />
+                          <CommentField
+                              activity={props.activity}
+                              onAddReaction={props.onAddReaction}
+                          />
+                          <CommentList
+                              activityId={props.activity.id}
+                              CommentItem={(text) => (
+                                  <Comment text={text}/>
+                              )}
+                          />
+                      </div>
+                  )}
+              />
 
-        )
-    }
+          } />
+        </React.Fragment>
+
+    )
+  }
 }
 export default withRouter(Home)

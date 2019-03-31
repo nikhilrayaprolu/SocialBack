@@ -10,17 +10,18 @@ import { Dropdown, Link } from 'react-activity-feed';
 export default class UserBar extends React.Component {
   render() {
       let timestamp = this.props.activity.time;
-      let username = this.props.activity.actor || this.props.activity.data.name;
+      let username = (this.props.activity.actor.data)? this.props.activity.actor.data.name: this.props.activity.actor;
         let time = humanizeTimestamp(timestamp);
+        console.log(username);
     return (
       <div className="raf-user-bar">
         <div className="raf-user-bar__details">
-            <div id="profileImage">{username.data.name[0]}</div>
+            <div id="profileImage">{username[0]}</div>
           <p
             className="raf-user-bar__username"
             onClick={this.props.onClickUser}
           >
-              {username.data.name}
+              {username}
           </p>
           {this.props.icon !== undefined ? (
             <img src={this.props.icon} alt="icon" />

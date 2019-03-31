@@ -94,8 +94,7 @@ export default class Friends extends React.Component {
                 <div className="row">
                     <div className="col-md-2">
                         <a href={"/" + item.username}>
-                        <img src="https://www.infrascan.net/demo/assets/img/avatar5.png"
-                             alt="User profile picture" className="img-circle" width="60px" />
+                        <div id="profileImage">{item.username[0]}</div>
                         </a>
                     </div>
                     <div className="col-md-6">
