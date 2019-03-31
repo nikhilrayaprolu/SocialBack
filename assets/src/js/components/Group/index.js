@@ -9,6 +9,7 @@ import {
 import UnApprovedGroup from "../UnApprovedGroup";
 import SchoolGroup from "../SchoolGroup";
 import {doupdaterequest, feedrequest, getCookie, handlefollow} from "../../utils";
+import UserBar from "../YSUserBar";
 class Group extends React.Component {
     constructor(props) {
         super(props);
@@ -32,12 +33,10 @@ class Group extends React.Component {
     }
     componentWillMount() {
         var csrftoken = getCookie('csrftoken');
-        console.log('api call made')
         fetch("/api/moderator/"+this.props.match.params.groupid)
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log('result received');
                     this.setState({
                         isLoaded: true,
                         ismoderator: result.ismoderator,
@@ -116,6 +115,9 @@ class Group extends React.Component {
                         doFeedRequest = {feedrequest}
                         Activity={(props) =>
                             <Activity {...props}
+                                Header={() => (
+                                          <UserBar {...props} />
+                                      )}
                                       Footer={() => (
                                           <div style={ {padding: '8px 16px'} }>
                                               <LikeButton {...props} />
@@ -134,7 +136,6 @@ class Group extends React.Component {
         )
     }
     schoolgroupfeed() {
-        console.log(this.state.user_profile)
         return (
             this.state.user_profile && <React.Fragment>
                 <div id="react-feed">
@@ -145,7 +146,6 @@ class Group extends React.Component {
         )
     }
     groupcard() {
-        console.log(this.state.group_details)
         return (
             <React.Fragment>
                 { this.state.group_details ? (

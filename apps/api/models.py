@@ -56,6 +56,7 @@ class Page(models.Model):
 class School(models.Model):
     organization = models.OneToOneField(Organization, related_name='school_profile',on_delete=models.CASCADE, primary_key=True)
     schoolname = models.CharField(max_length=50, blank=True, null=True)
+    description = models.CharField(max_length=400, blank=True, null=True)
     principal = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     contact_number = models.CharField(max_length=20, blank=True, null=True)

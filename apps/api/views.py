@@ -6,8 +6,6 @@ from django.db.models import F, Value
 from django.db.models.functions import Concat
 from django.http import HttpResponse, Http404, JsonResponse
 from django.template import loader
-from django.contrib.auth.models import User
-import datetime
 import stream
 from rest_framework import status
 from rest_framework.response import Response
@@ -28,18 +26,22 @@ def index(request):
     context = {
         'user_token': user_token,
         'appId': settings.STREAM_APP_ID,
-        'apiKey': settings.STREAM_API_KEY
+        'apiKey': settings.STREAM_API_KEY,
+        'school' : request.user.mini_user_profile.school or ''
     }
+    if context['school']:
+        context['schoolpage'] = request.user.mini_user_profile.school.page_id.pageid
     template = loader.get_template('frontend/index.html')
+    print(context)
     return HttpResponse(template.render(context, request))
 
-def followalluserstotheirtimeline():
+def followalltimelinestotheirusers():
     users = Page.objects.all()
     follows = []
     for page in users:
         pageobject = {
-            'source': 'user:' + page.pageid,
-            'target': 'timeline:' + page.pageid
+            'source': 'timeline:' + page.pageid,
+            'target': 'user:' + page.pageid
         }
         follows.append(pageobject)
     client.follow_many(follows)
@@ -47,7 +49,6 @@ def followalluserstotheirtimeline():
 def createuserobjects():
     users = UserMiniProfile.objects.all()
     for user in users:
-
         client.users.update(
             user.user.username,
             {"name": user.first_name + ' ' + user.last_name,
@@ -131,26 +132,34 @@ class isModerator(APIView):
     def get(self, request, feedgroup):
         print(request.user)
         user_mini_profile = UserMiniReadOnlyProfileSerializer(request.user.mini_user_profile)
-        group_object = GlobalGroup.objects.get(page_id=feedgroup)
-        group_details = GlobalGroupSerializer(group_object)
+
+        try:
+            group_object = GlobalGroup.objects.get(page_id=feedgroup)
+            group_details = GlobalGroupSerializer(group_object).data
+        except GlobalGroup.DoesNotExist:
+            try:
+                group_object = School.objects.get(page_id=feedgroup)
+                group_details = SchoolSerializer(group_object).data
+            except School.DoesNotExist:
+                group_object = {}
+                group_details = {}
+
         follow_relation = self.get_follow(request.user.mini_user_profile.page_id, feedgroup)
         print(follow_relation)
         following = False
         if follow_relation:
             following = True
 
-
-        print(group_details.data)
         try:
             moderator = FeedModerator.objects.get(page=feedgroup, moderator=request.user)
             if moderator:
-                return Response({'ismoderator': True, 'user_profile': user_mini_profile.data, 'group_details': group_details.data, 'following': following},
+                return Response({'ismoderator': True, 'user_profile': user_mini_profile.data, 'group_details': group_details, 'following': following},
                                 status=200)
             else:
-                return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details.data, 'following': following},
+                return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details, 'following': following},
                                 status=200)
         except FeedModerator.DoesNotExist:
-            return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details.data, 'following': following},
+            return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details, 'following': following},
                             status=200)
 
 class ApproveFeed(APIView):
