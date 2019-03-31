@@ -1,5 +1,5 @@
 import React from 'react';
-import { humanizeTimestamp } from '../../utils';
+import { humanizeTimestamp, removeComment } from '../../utils';
 import { Dropdown, Link, CommentItem } from 'react-activity-feed';
 
 /**
@@ -33,8 +33,7 @@ export default class Comment extends React.Component {
                 <Dropdown>
                     <ul>
                         <li><Link onClick={() => {
-                            console.log(this.props.text.comment.id);
-                            // The reaction ID is being logged in the above statement, I don't know yet how to delete it
+                            removeComment(this.props.text.comment.id, username);
                         }}>Remove</Link></li>
                     </ul>
                 </Dropdown>

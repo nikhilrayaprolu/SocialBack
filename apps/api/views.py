@@ -157,8 +157,14 @@ def getfeed(request, feedgroup, userid):
         print("inside post")
         print(request.body)
         activity = json.loads(request.body.decode(encoding='UTF-8'))
-        print(activity);
+        print(activity)
         return JsonResponse(client.feed(feedgroup, userid).add_activity(activity))
+
+@login_required
+def remove_comment(request):
+
+    client.reactions.delete(request.GET.get('id'))
+    return HttpResponse("N")
 
 class AddNewGlobalGroup(APIView):
     def post(self, request):
