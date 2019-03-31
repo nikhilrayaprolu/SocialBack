@@ -10,7 +10,7 @@ export default class UserBar extends React.Component {
   render() {
       let timestamp = this.props.activity.time;
       console.log(this.props.activity)
-      let username = this.props.activity.actor || this.props.activity.data.name;
+      let username = (this.props.activity.actor.data)? this.props.activity.actor.data.name: this.props.activity.actor;
     let time = humanizeTimestamp(timestamp);
     return (
       <div className="raf-user-bar">

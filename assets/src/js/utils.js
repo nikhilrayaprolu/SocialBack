@@ -26,7 +26,9 @@ export function feedrequest(client, feedGroup, userId, options) {
     })
 }
 export function doupdaterequest(params, feedgroup, feedid) {
-    params['actor'] = params.actor.id
+    console.log(params.actor)
+    params.actor = 'SU:'+params.actor.id
+    console.log(params)
     var url = new URL(window.location.origin+'/getfeed/'+ feedgroup +'/'+ feedid);
     var csrftoken = getCookie('csrftoken');
 

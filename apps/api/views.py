@@ -150,13 +150,15 @@ def getfeed(request, feedgroup, userid):
     print(request.POST)
     if request.method == 'GET':
         print("inside get")
-        return JsonResponse(client.feed(feedgroup, userid).get(**request.GET))
+        data = client.feed(feedgroup, userid).get(enrich=True, **request.GET)
+        print(data)
+        return JsonResponse(data)
     else:
         print("inside post")
         print(request.body)
         activity = json.loads(request.body.decode(encoding='UTF-8'))
+        print(activity);
         return JsonResponse(client.feed(feedgroup, userid).add_activity(activity))
-
 
 class AddNewGlobalGroup(APIView):
     def post(self, request):

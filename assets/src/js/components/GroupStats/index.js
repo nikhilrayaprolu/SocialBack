@@ -53,8 +53,7 @@ class GroupStats extends React.Component {
                 <div className="row">
                     <div className="col-md-2">
                         <a>
-                            <img src="https://www.infrascan.net/demo/assets/img/avatar5.png"
-                                 alt="picture" className="img-circle" width="60px" />
+                            <div id="profileImage">{item.name[0]}</div>
                         </a>
                     </div>
                     <div className="col-md-6">
