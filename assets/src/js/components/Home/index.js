@@ -9,6 +9,7 @@ import {
 import {browserHistory} from 'react-router';
 import {withRouter} from "react-router-dom";
 import UserBar from "../YSUserBar";
+import Comment from "../Comment";
 class Home extends React.Component {
 
     render () {
@@ -29,22 +30,24 @@ class Home extends React.Component {
                                       Header={() => (
                                           <UserBar {...props} />
                                       )}
-                                      Header={() => (
-                                          <UserBar {...props} />
-                                      )}
                                       Footer={() => (
                                           <div style={ {padding: '8px 16px'} }>
                                               <LikeButton {...props} />
                                               <CommentField
                                                   activity={props.activity}
-                                                  onAddReaction={props.onAddReaction} />
-                                              <CommentList activityId={props.activity.id} />
+                                                  onAddReaction={props.onAddReaction}
+                                              />
+                                              <CommentList
+                                                  activityId={props.activity.id}
+                                                  CommentItem={(text) => (
+                                                      <Comment text={text}/>
+                                                  )}
+                                              />
                                           </div>
                                       )}
                             />
                         )
-                    }
-                    }
+                    }}
                 />
                 </div>
             </React.Fragment>

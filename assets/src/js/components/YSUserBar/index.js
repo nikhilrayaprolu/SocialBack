@@ -1,5 +1,6 @@
 import React from 'react';
 import { humanizeTimestamp } from '../../utils';
+import { Dropdown, Link } from 'react-activity-feed';
 
 /**
  * Component is described here.
@@ -9,18 +10,17 @@ import { humanizeTimestamp } from '../../utils';
 export default class UserBar extends React.Component {
   render() {
       let timestamp = this.props.activity.time;
-      console.log(this.props.activity)
       let username = this.props.activity.actor || this.props.activity.data.name;
-    let time = humanizeTimestamp(timestamp);
+        let time = humanizeTimestamp(timestamp);
     return (
       <div className="raf-user-bar">
         <div className="raf-user-bar__details">
-            <div id="profileImage">{username[0]}</div>
+            <div id="profileImage">{username.data.name[0]}</div>
           <p
             className="raf-user-bar__username"
             onClick={this.props.onClickUser}
           >
-              {username}
+              {username.data.name}
           </p>
           {this.props.icon !== undefined ? (
             <img src={this.props.icon} alt="icon" />
@@ -37,14 +37,19 @@ export default class UserBar extends React.Component {
           ) : null}
         </div>
         <React.Fragment>
-            <p className="raf-user-bar__extra">
+            <span className="raf-user-bar__extra">
               <time
                 dateTime={time}
                 title={time}
               >
                 {time}
               </time>
-            </p>
+                <Dropdown>
+                    <ul>
+                        <li><Link onClick={() => {this.props.onRemoveActivity(this.props.activity.id);}}>Remove</Link></li>
+                    </ul>
+                </Dropdown>
+            </span>
         </React.Fragment>
       </div>
     );
