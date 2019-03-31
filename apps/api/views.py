@@ -13,8 +13,8 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 
 from .serializers import UserMiniProfileSerializer, SchoolSerializer, FeedModeratorSerializer, FollowSerializer, \
-    GlobalGroupSerializer, FriendSerializer, UserMiniReadOnlyProfileSerializer
-from .models import Page, UserMiniProfile, School, GlobalGroup, UserSectionMapping, Follow, FeedModerator
+    GlobalGroupSerializer, FriendSerializer, UserMiniReadOnlyProfileSerializer, CourseSerializer
+from .models import Page, UserMiniProfile, School, GlobalGroup, UserSectionMapping, Follow, FeedModerator, Course
 from django.conf import settings
 
 client = stream.connect(settings.STREAM_API_KEY, settings.STREAM_API_SECRET)
@@ -29,7 +29,8 @@ def index(request):
         'user_token': user_token,
         'appId': settings.STREAM_APP_ID,
         'apiKey': settings.STREAM_API_KEY,
-        'school' : request.user.mini_user_profile.school or ''
+        'school' : request.user.mini_user_profile.school or '',
+        'userid': request.user.username
     }
     if context['school']:
         context['schoolpage'] = request.user.mini_user_profile.school.page_id.pageid
@@ -158,13 +159,36 @@ def getfeed(request, feedgroup, userid):
 
 
 class AddNewGlobalGroup(APIView):
-    def post(selfr, request):
+    def post(self, request):
         newglobalgroup = GlobalGroupSerializer(request.data)
         if newglobalgroup.is_valid:
             newglobalgroup.save()
             return Response(newglobalgroup.data,
                             status=200)
         return Response(newglobalgroup.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GroupStats(APIView):
+    def get(self, request):
+        user_section = request.user.section.section
+        user_follow_courses = Follow.objects.filter(from_page=request.user.mini_user_profile.page_id, type_of_page='course').values_list('to_page')
+        courses_following = Course.objects.filter(course_section = user_section, page_id__in =user_follow_courses)
+        courses_not_following = Course.objects.filter(course_section=user_section).exclude(page_id__in = user_follow_courses)
+        courses_following_details = CourseSerializer(courses_following, many=True).data
+        courses_not_following_details = CourseSerializer(courses_not_following, many=True).data
+        user_follow_groups = Follow.objects.filter(from_page=request.user.mini_user_profile.page_id, type_of_page='globalgroup').values_list('to_page')
+        global_group_following = GlobalGroup.objects.filter(page_id__in = user_follow_groups)
+        global_group_not_following = GlobalGroup.objects.exclude(page_id__in=user_follow_groups)
+        global_group_following_details = GlobalGroupSerializer(global_group_following, many=True).data
+        global_group_not_following_details = GlobalGroupSerializer(global_group_not_following, many=True).data
+        context = {
+            'courses_following_details': courses_following_details,
+            'courses_not_following_details' : courses_not_following_details,
+            'global_group_following_details': global_group_following_details,
+            'global_group_not_following_details': global_group_not_following_details
+        }
+        return Response(context, status=200)
+
+
 
 
 class ClassStudentList(APIView):
@@ -204,7 +228,7 @@ class isModerator(APIView):
         following = False
         if follow_relation:
             following = True
-            
+
         try:
             moderator = FeedModerator.objects.get(page=feedgroup, moderator=request.user)
             if moderator:
@@ -216,7 +240,7 @@ class isModerator(APIView):
         except FeedModerator.DoesNotExist:
             return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details, 'following': following},
                             status=200)
-          
+
 class ApproveFeed(APIView):
     def post(self, request):
         feed_group = request.data['feed_group']

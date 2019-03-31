@@ -155,16 +155,6 @@ class SchoolGroup(models.Model):
     school = models.ForeignKey(School, blank=True, null=True, on_delete=models.CASCADE, related_name='school_groups')
     globalgroup = models.ForeignKey(GlobalGroup, null=True, blank=True, related_name="schoolgroups")
 
-
-class CourseGroup(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=400)
-    page_id = models.ForeignKey(Page, null=True, blank=True, related_name="coursegroup", on_delete=models.CASCADE)
-    school = models.ForeignKey(School, blank=True, null=True, on_delete=models.CASCADE,
-                               related_name='school_course_groups')
-    course_id = models.ForeignKey(Course, blank=True, null=True, on_delete=models.CASCADE, related_name='course_group')
-
-
 class Follow(models.Model):
     from_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='from_follow')
     to_page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='to_follow')

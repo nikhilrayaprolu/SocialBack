@@ -10,6 +10,7 @@ import UnApprovedGroup from "../../components/UnApprovedGroup";
 import SchoolFeed from "../../components/School";
 import CourseGroup from "../../components/Course";
 import SearchUsers from "../../components/searchfilter";
+import GroupStats from "../../components/GroupStats";
 
 class App extends React.Component {
   render () {
@@ -31,6 +32,7 @@ class App extends React.Component {
           <Route path='/school/:schoolid' component={SchoolFeed}/>
           <Route path='/school' component={SchoolFeed}/>
           <Route path='/course/:courseid' component={CourseGroup}/>
+          <Route path='/groupstats' component={GroupStats}/>
           <Route path='/:userid' component={Feed}/>
 
       </Switch>
