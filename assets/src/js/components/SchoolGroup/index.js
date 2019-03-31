@@ -6,13 +6,12 @@ import {
     LikeButton,
     StatusUpdateForm,
 } from "react-activity-feed";
+import UserBar from "../YSUserBar";
 class SchoolGroup extends React.Component {
     constructor(props) {
         super(props);
         console.log(this.props)
         this.doupdaterequest = this.doupdaterequest.bind(this)
-
-
     }
     getCookie(name) {
         var cookieValue = null;
@@ -76,6 +75,9 @@ class SchoolGroup extends React.Component {
                     doFeedRequest = {this.feedrequest}
                     Activity={(props) =>
                         <Activity {...props}
+                            Header={() => (
+                                          <UserBar {...props} />
+                                      )}
                                   Footer={() => (
                                       <div style={ {padding: '8px 16px'} }>
                                           <LikeButton {...props} />

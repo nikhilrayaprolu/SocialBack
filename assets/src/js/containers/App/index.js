@@ -29,6 +29,7 @@ class App extends React.Component {
           <Route path='/unapprovedgroup/:groupid' component={UnApprovedGroup}/>
           <Route path='/friends/' component={Friends}/>
           <Route path='/school/:schoolid' component={SchoolFeed}/>
+          <Route path='/school' component={SchoolFeed}/>
           <Route path='/course/:courseid' component={CourseGroup}/>
           <Route path='/:userid' component={Feed}/>
 

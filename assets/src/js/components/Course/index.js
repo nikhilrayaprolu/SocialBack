@@ -7,6 +7,7 @@ import {
     StatusUpdateForm,
 } from "react-activity-feed";
 import {doupdaterequest, feedrequest} from "../../utils";
+import UserBar from "../YSUserBar";
 class CourseGroup extends React.Component {
     constructor(props) {
         super(props);
@@ -33,6 +34,9 @@ class CourseGroup extends React.Component {
                         doFeedRequest = {feedrequest}
                         Activity={(props) =>
                             <Activity {...props}
+                                        Header={() => (
+                                          <UserBar {...props} />
+                                      )}
                                       Footer={() => (
                                           <div style={ {padding: '8px 16px'} }>
                                               <LikeButton {...props} />

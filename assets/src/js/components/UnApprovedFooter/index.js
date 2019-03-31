@@ -1,5 +1,6 @@
 import React from "react";
 import {Activity} from "react-activity-feed";
+import UserBar from "../YSUserBar";
 
 class UnApprovedFooter extends React.Component {
     constructor(props) {
@@ -39,6 +40,9 @@ class UnApprovedFooter extends React.Component {
             return (
                 <React.Fragment>
                     <Activity {...this.props}
+                        Header={() => (
+                                          <UserBar {...props} />
+                                      )}
                               Footer={() => (
                                   <div style={{padding: '8px 16px'}}>
                                       <button type="button" className="btn btn-primary" onClick={() => {this.props.activityapprove(this.props.activity.id, true, false);this.changefooter(true, null)}}>Approve</button>

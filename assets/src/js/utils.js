@@ -1,6 +1,7 @@
 import UnApprovedGroup from "./components/Group";
 import React from "react";
 import {Activity, CommentField, CommentList, FlatFeed, LikeButton, StatusUpdateForm} from "react-activity-feed";
+import * as moment from "moment";
 
 export function getCookie(name) {
     var cookieValue = null;
@@ -68,4 +69,12 @@ export function handlefollow(from_page, to_page, type_of_page) {
             (error) => {
                 console.log(error)
             })
+}
+
+
+export function humanizeTimestamp(timestamp) {
+  const time = moment.utc(timestamp); // parse time as UTC
+  const now = moment();
+  // Not in future humanized time
+  return moment.min(time, now).from(now);
 }
