@@ -12,7 +12,6 @@ import UserBar from "../YSUserBar";
 class Home extends React.Component {
 
     render () {
-        console.log("came into home")
         return (
             <React.Fragment>
                 <div id="react-feed">
@@ -45,7 +44,6 @@ class Home extends React.Component {
                             />
                         )
                     }
-
                     }
                 />
                 </div>

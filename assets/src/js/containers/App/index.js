@@ -9,6 +9,7 @@ import {Route, Switch} from "react-router-dom";
 import UnApprovedGroup from "../../components/UnApprovedGroup";
 import SchoolFeed from "../../components/School";
 import CourseGroup from "../../components/Course";
+import SearchUsers from "../../components/searchfilter";
 
 class App extends React.Component {
   render () {
@@ -24,6 +25,7 @@ class App extends React.Component {
         <Switch>
         <Route exact path='/' component={Home}/>
           <Route path='/group/:groupid' component={Group}/>
+          <Route path='/search/users/' component={SearchUsers}/>
           <Route path='/unapprovedgroup/:groupid' component={UnApprovedGroup}/>
           <Route path='/friends/' component={Friends}/>
           <Route path='/school/:schoolid' component={SchoolFeed}/>
