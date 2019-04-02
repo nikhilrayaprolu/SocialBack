@@ -8,12 +8,43 @@ import { Dropdown, Link, CommentItem } from 'react-activity-feed';
  * @example ./examples/UserBar.md
  */
 export default class Comment extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoaded: false,
+            userid: ""
+        };
+    }
+    componentDidMount() {
+        fetch('/api/me')
+            .then(res => res.json())
+            .then((result) => {
+                this.setState({
+                    isLoaded: true,
+                    userid: result,
+                });
+            }, (error) => {
+                this.setState({
+                    isLoaded: true,
+                    userid: ""
+                })
+            });
+    }
   render() {
       let timestamp = this.props.text.comment.created_at;
       let username = this.props.text.comment.user.data.name;
       let time = humanizeTimestamp(timestamp);
       let comment = this.props.text.comment.data.text;
-      console.log(this.props);
+      const { isLoaded, userid } = this.state;
+      let renderData = null;
+      if(isLoaded && userid === this.props.text.comment.user_id)
+          renderData = (
+                <Dropdown>
+                    <ul>
+                        <li><Link onClick={() => {removeComment(this.props.text.comment.id);}}>Remove</Link></li>
+                    </ul>
+                </Dropdown>
+          );
     return (
       <div className="raf-user-bar">
         <div className="raf-user-bar__details">
@@ -30,13 +61,7 @@ export default class Comment extends React.Component {
               >
                 {time}
               </time>
-                <Dropdown>
-                    <ul>
-                        <li><Link onClick={() => {
-                            removeComment(this.props.text.comment.id, username);
-                        }}>Remove</Link></li>
-                    </ul>
-                </Dropdown>
+                {renderData}
             </div>
          </React.Fragment>
       </div>
