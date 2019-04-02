@@ -84,3 +84,7 @@ export function humanizeTimestamp(timestamp) {
 export function removeComment(id) {
     fetch("/api/delete_reaction?id=" + id).then((res) => res);
 }
+
+export function addReaction(username, id, tousername, text) {
+    fetch("/api/add_reaction?id=" + id + "&username=" + username + "&touser=" + tousername + "&text=" + text).then((res) => res);
+}
