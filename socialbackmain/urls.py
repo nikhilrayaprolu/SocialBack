@@ -30,5 +30,5 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^admin/', admin.site.urls),
     url('api-token-auth/', obtain_jwt_token),
-    url(r'', include('apps.api.urls')),
+    url(r'youngwall/', include('apps.api.urls')),
 ]

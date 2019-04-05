@@ -26,7 +26,7 @@ class UnApprovedGroup extends React.Component {
             approve: approve,
             decline: decline
         };
-        fetch("/api/approve/",{
+        fetch("/youngwall/approve/",{
             headers: {
                 "Content-Type": 'application/json; charset=utf-8',
                 'X-CSRFToken': csrftoken

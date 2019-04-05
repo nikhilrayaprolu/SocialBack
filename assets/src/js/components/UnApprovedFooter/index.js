@@ -41,8 +41,9 @@ class UnApprovedFooter extends React.Component {
                 <React.Fragment>
                     <Activity {...this.props}
                         Header={() => (
-                                          <UserBar {...props} />
+                                          <UserBar {...this.props} />
                                       )}
+
                               Footer={() => (
                                   <div style={{padding: '8px 16px'}}>
                                       <button type="button" className="btn btn-primary" onClick={() => {this.props.activityapprove(this.props.activity.id, true, false);this.changefooter(true, null)}}>Approve</button>

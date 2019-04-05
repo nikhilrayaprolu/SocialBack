@@ -139,13 +139,6 @@ def me(request):
     return JsonResponse(request.user.username, safe=False)
 
 
-def groups(request):
-    availablegroups = GlobalGroup.objects.all()
-    groupserializer = GlobalGroupSerializer(availablegroups)
-    return Response(groupserializer.data,
-                    status=200)
-
-
 def getfeed(request, feedgroup, userid):
     print(request.POST)
     if request.method == 'GET':
@@ -159,15 +152,6 @@ def getfeed(request, feedgroup, userid):
         activity = json.loads(request.body.decode(encoding='UTF-8'))
         print(activity);
         return JsonResponse(client.feed(feedgroup, userid).add_activity(activity))
-
-class AddNewGlobalGroup(APIView):
-    def post(self, request):
-        newglobalgroup = GlobalGroupSerializer(request.data)
-        if newglobalgroup.is_valid:
-            newglobalgroup.save()
-            return Response(newglobalgroup.data,
-                            status=200)
-        return Response(newglobalgroup.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GroupStats(APIView):
     def get(self, request):
@@ -189,20 +173,6 @@ class GroupStats(APIView):
             'global_group_not_following_details': global_group_not_following_details
         }
         return Response(context, status=200)
-
-
-
-
-class ClassStudentList(APIView):
-    def get_users_of_class(class_id):
-        users = UserMiniProfile.objects.filter(section__section__section_class=class_id)
-        return users
-
-    def get(self, request, class_id):
-        users = self.get_users_of_class(class_id)
-        userprofiles = UserMiniProfileSerializer(users)
-        return Response(userprofiles.data,
-                        status=200)
 
 
 class isModerator(APIView):
@@ -332,16 +302,6 @@ class TeacherProfile(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class StartSchoolFeed(APIView):
-    def get(self, request, pk):
-        follows = []
-        schoolobject = School.objects.get(id=pk)
-        schoolobject.school_feed = True
-        schoolobject.save()
-        schoolobjectserializer = SchoolSerializer()
-        return Response(schoolobjectserializer.data)
-
-
 class AddFeedModerator(APIView):
 
     def post(self, request):
@@ -360,17 +320,3 @@ class AddFeedModerator(APIView):
         client.follow_many(follows)
         return Response(feedmoderatorserializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class AddNewGlobalGroup(APIView):
-    def post(self, request):
-        pass
-
-
-class AddNewSchoolGroup(APIView):
-    def post(self, request):
-        pass
-
-
-class AddNewCourseGroup(APIView):
-    def post(self, request):
-        pass

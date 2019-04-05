@@ -14,7 +14,7 @@ export default class FollowButton extends React.Component {
   render() {
     const { clicked, followed } = this.props;
     return (
-      <div
+      <button
         className={`raf-follow-button ${
           this.state.followed ? 'raf-follow-button--active' : ''
         }`}
@@ -22,7 +22,7 @@ export default class FollowButton extends React.Component {
         onClick={()=>{clicked(); this.setState({followed: !this.state.followed})}}
       >
         {this.state.followed ? 'Following' : 'Follow'}
-      </div>
+      </button>
     );
   }
 }
