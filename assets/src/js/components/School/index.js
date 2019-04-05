@@ -26,7 +26,7 @@ class SchoolFeed extends React.Component {
     }
     componentDidMount() {
         var csrftoken = getCookie('csrftoken');
-        fetch("/api/moderator/"+this.feedid)
+        fetch("/youngwall/moderator/"+this.feedid)
             .then(res => res.json())
             .then(
                 (result) => {

@@ -22,7 +22,7 @@ export default class SearchUsers extends React.Component {
     }
     handleSubmit(event) {
         event.preventDefault();
-        let q = "/api/search/user?";
+        let q = "/youngwall/search/user?";
         if(this.state.school)
             q += "school=" + this.state.school + "&";
         if(this.state.classLevel)

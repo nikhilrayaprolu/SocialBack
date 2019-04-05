@@ -1,6 +1,5 @@
 import React from 'react';
 import { StreamApp, NotificationDropdown, FlatFeed, LikeButton, Activity, CommentList, CommentField, StatusUpdateForm} from 'react-activity-feed';
-import 'react-activity-feed/dist/index.css';
 import Home from '../../components/Home'
 import Feed from '../../components/Feed'
 import Group from '../../components/Group'
@@ -24,16 +23,16 @@ class App extends React.Component {
       >
         <NotificationDropdown notify/>
         <Switch>
-        <Route exact path='/' component={Home}/>
-          <Route path='/group/:groupid' component={Group}/>
-          <Route path='/search/users/' component={SearchUsers}/>
-          <Route path='/unapprovedgroup/:groupid' component={UnApprovedGroup}/>
-          <Route path='/friends/' component={Friends}/>
-          <Route path='/school/:schoolid' component={SchoolFeed}/>
-          <Route path='/school' component={SchoolFeed}/>
-          <Route path='/course/:courseid' component={CourseGroup}/>
-          <Route path='/groupstats' component={GroupStats}/>
-          <Route path='/:userid' component={Feed}/>
+        <Route exact path='/youngwall/' component={Home}/>
+          <Route path='/youngwall/group/:groupid' component={Group}/>
+          <Route path='/youngwall/search/users/' component={SearchUsers}/>
+          <Route path='/youngwall/unapprovedgroup/:groupid' component={UnApprovedGroup}/>
+          <Route path='/youngwall/friends' component={Friends}/>
+          <Route path='/youngwall/school/:schoolid' component={SchoolFeed}/>
+          <Route path='/youngwall/school' component={SchoolFeed}/>
+          <Route path='/youngwall/course/:courseid' component={CourseGroup}/>
+          <Route path='/youngwall/groupstats' component={GroupStats}/>
+          <Route path='/youngwall/:userid' component={Feed}/>
 
       </Switch>
       </StreamApp>

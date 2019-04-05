@@ -24,7 +24,7 @@ export default class Friends extends React.Component {
         this.handleChangeuser = this.handleChangeuser.bind(this);
     }
     componentDidMount() {
-        fetch("/api/friends")
+        fetch("/youngwall/friendslist")
             .then(res => res.json())
             .then(
                 (result) => {
@@ -45,7 +45,7 @@ export default class Friends extends React.Component {
     }
     handleSubmit(event) {
         event.preventDefault();
-        let q = "/api/search/user?";
+        let q = "/youngwall/search/user?";
         if(this.state.school)
             q += "school=" + this.state.school + "&";
         if(this.state.classLevel)
@@ -116,7 +116,7 @@ export default class Friends extends React.Component {
         if (error) {
             return <React.Fragment><div>Error: {error.message}</div></React.Fragment>;
         } else if (!isLoaded) {
-            return <React.Fragment><div className="container" id="react-feed"><h2>Loading...</h2></div></React.Fragment>;
+            return <React.Fragment><div className="container" id="react-feed"><h2>Loading... Friends</h2></div></React.Fragment>;
         } else {
             let friends = "";
             let teachers = "";

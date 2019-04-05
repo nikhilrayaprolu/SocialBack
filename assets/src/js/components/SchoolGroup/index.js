@@ -28,7 +28,7 @@ class SchoolGroup extends React.Component {
         return cookieValue;
     }
     feedrequest(client, feedGroup, userId, options) {
-        var url = new URL(window.location.origin+'/getfeed/'+feedGroup+'/'+userId);
+        var url = new URL(window.location.origin+'/youngwall/getfeed/'+feedGroup+'/'+userId);
         delete options['reactions'];
         url.search = new URLSearchParams(options)
         console.log(url)
@@ -40,7 +40,7 @@ class SchoolGroup extends React.Component {
     doupdaterequest(params) {
         console.log(params)
         params['actor'] = params.actor.id
-        var url = new URL(window.location.origin+'/getfeed/'+'globalgroup'+'/'+ this.props.schoolgroupid);
+        var url = new URL(window.location.origin+'/youngwall/getfeed/'+'globalgroup'+'/'+ this.props.schoolgroupid);
         console.log(url)
         var csrftoken = this.getCookie('csrftoken');
 

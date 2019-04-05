@@ -1,17 +1,16 @@
 from django.conf.urls import url
 
-from .views import FollowApi, isModerator, ApproveFeed, GroupStats
-from . import views
+from . import views as social_back
 
 urlpatterns = [
-    url(r'api/friends', views.friends, name='friends'),
-    url(r'api/groupstats', GroupStats.as_view()),
-    url(r'api/delete_reaction', views.remove_comment, name='remove_comment'),
-    url(r'api/search/user', views.search, name='search'),
-    url(r'^getfeed/(?P<feedgroup>[\w\-]+)/(?P<userid>[\w\-]+)', views.getfeed, name='getfeed'),
-    url(r'^api/follow', FollowApi.as_view()),
-    url(r'^api/moderator/(?P<feedgroup>[\w\-]+)', isModerator.as_view()),
-    url(r'^api/approve/', ApproveFeed.as_view()),
-    url(r'', views.index, name='index'),
-
+    url(r'friendslist', social_back.friends, name='friends'),
+    url(r'groupstats', social_back.GroupStats.as_view()),
+    url(r'me', social_back.me, name='me'),
+    url(r'delete_reaction', views.remove_comment, name='remove_comment'),
+    url(r'search/user', social_back.search, name='search'),
+    url(r'^getfeed/(?P<feedgroup>[\w\-]+)/(?P<userid>[\w\-]+)', social_back.getfeed, name='getfeed'),
+    url(r'^follow', social_back.FollowApi.as_view()),
+    url(r'^moderator/(?P<feedgroup>[\w\-]+)', social_back.isModerator.as_view()),
+    url(r'^approve/', social_back.ApproveFeed.as_view()),
+    url(r'', social_back.index, name='index'),
 ]

@@ -33,7 +33,7 @@ class Group extends React.Component {
     }
     componentWillMount() {
         var csrftoken = getCookie('csrftoken');
-        fetch("/api/moderator/"+this.props.match.params.groupid)
+        fetch("/youngwall/moderator/"+this.props.match.params.groupid)
             .then(res => res.json())
             .then(
                 (result) => {

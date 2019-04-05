@@ -35,7 +35,21 @@ module.exports = {
           test: /\.scss$/,
           use: ExtractText.extract({
             fallback: 'style-loader',
-            use: ['css-loader', 'sass-loader']
+            use: ['css-loader',{
+              loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              ident: 'postcss',
+              plugins: () => [
+                /* eslint-disable global-require */
+                require('postcss-pseudo-class-any-link'),
+                require('postcss-initial')(),
+                require('postcss-prepend-selector')({ selector: '#react-app ' }),
+                /* eslint-enable global-require */
+              ],
+            },
+          },
+              'sass-loader']
           })
         },
       ],

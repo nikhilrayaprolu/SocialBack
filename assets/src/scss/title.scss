@@ -1,3 +1,29 @@
+ * {
+  all: initial;
+  /* allow all elements to inherit these properties from the root "body" div */
+   font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: inherit;
+}
+
+@import 'default';
+ @import '~react-activity-feed/dist/index';
+ @import '~bootstrap/scss/bootstrap';
+
+#react-app {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-base;
+  line-height: $line-height-base;
+  color: $body-color;
+  text-align: left;
+  background-color: rgb(255, 255, 255);
+}
+
 .title {
   color: red;
 }
@@ -87,3 +113,4 @@ input[type="submit"], input[type="button"], button, .button {
     margin: 5px;
   }
 }
+

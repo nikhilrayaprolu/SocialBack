@@ -143,9 +143,11 @@ class FeedModerator(models.Model):
 
 
 class GlobalGroup(models.Model):
-    name = models.CharField(max_length=50)
-    description = models.CharField(max_length=400)
-    page_id = models.OneToOneField(Page, related_name="globalgroup", on_delete=models.CASCADE, primary_key=True)
+    name = models.CharField(max_length=50, blank=True, null=True)
+    longname = models.CharField(max_length=100, blank=True, null=True)
+    description = models.CharField(max_length=400, blank=True, null=True)
+    group_image = models.ImageField(blank=True, upload_to='school_logo', default='school_logo/no-image.jpg')
+    page_id = models.OneToOneField(Page, related_name="globalgroup", primary_key=True)
 
 
 class SchoolGroup(models.Model):

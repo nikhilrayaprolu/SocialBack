@@ -25,7 +25,7 @@ class GroupStats extends React.Component {
     }
     componentWillMount() {
 
-        fetch("/api/groupstats")
+        fetch("/youngwall/groupstats")
             .then(res => res.json())
             .then(
                 (result) => {
