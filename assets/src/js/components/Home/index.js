@@ -9,10 +9,11 @@ import {
 import {browserHistory} from 'react-router';
 import {withRouter} from "react-router-dom";
 import UserBar from "../YSUserBar";
+import Comment from "../Comment";
 class Home extends React.Component {
 
     render () {
-        console.log("came into home")
+        console.log("came into home");
     return (
         <React.Fragment>
         <StatusUpdateForm
@@ -24,23 +25,28 @@ class Home extends React.Component {
           Activity={(props) =>
               <Activity {...props}
                   onClickUser = {(user) => {console.log(user);this.props.history.push(user.id)}}
-                        Header={() => (
-                                          <UserBar {...props} />
-                                      )}
-                Footer={() => (
-                  <div style={ {padding: '8px 16px'} }>
-                    <LikeButton {...props} />
-                    <CommentField
-                      activity={props.activity}
-                      onAddReaction={props.onAddReaction} />
-                    <CommentList activityId={props.activity.id} />
-                  </div>
-                )}
+                    Header={() => (
+                                      <UserBar {...props} />
+                          )}
+                  Footer={() => (
+                      <div style={ {padding: '8px 16px'} }>
+                          <LikeButton {...props} />
+                          <CommentField
+                              activity={props.activity}
+                              onAddReaction={props.onAddReaction}
+                          />
+                          <CommentList
+                              activityId={props.activity.id}
+                              CommentItem={(text) => (
+                                  <Comment text={text}/>
+                              )}
+                          />
+                      </div>
+                  )}
               />
-            }
-          />
 
-            </React.Fragment>
+          } />
+        </React.Fragment>
 
     )
   }

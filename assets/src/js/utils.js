@@ -80,3 +80,7 @@ export function humanizeTimestamp(timestamp) {
   // Not in future humanized time
   return moment.min(time, now).from(now);
 }
+
+export function removeComment(id, username) {
+    fetch("/api/delete_reaction?username=" + username + "&id=" + id).then((res) => res);
+}
