@@ -18,7 +18,7 @@ export function getCookie(name) {
     return cookieValue;
 }
 export function feedrequest(client, feedGroup, userId, options) {
-    var url = new URL(window.location.origin+'/getfeed/'+feedGroup+'/'+userId);
+    var url = new URL(window.location.origin+'/youngwall/getfeed/'+feedGroup+'/'+userId);
     delete options['reactions'];
     url.search = new URLSearchParams(options)
     return fetch(url).then(result =>{
@@ -29,7 +29,7 @@ export function doupdaterequest(params, feedgroup, feedid) {
     console.log(params.actor)
     params.actor = 'SU:'+params.actor.id
     console.log(params)
-    var url = new URL(window.location.origin+'/getfeed/'+ feedgroup +'/'+ feedid);
+    var url = new URL(window.location.origin+'/youngwall/getfeed/'+ feedgroup +'/'+ feedid);
     var csrftoken = getCookie('csrftoken');
 
     return fetch(url, {
@@ -54,7 +54,7 @@ export function handlefollow(from_page, to_page, type_of_page) {
         to_page: to_page,
         type_of_page: type_of_page
     };
-    fetch("/api/follow/",{
+    fetch("/youngwall/follow/",{
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json; charset=utf-8',

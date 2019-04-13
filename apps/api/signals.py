@@ -22,13 +22,13 @@ def new_stream_user(sender, instance, **kwargs):
     )
     follows = []
     pageobject = {
-        'source': 'user:' + instance.user.username,
-        'target': 'timeline:' + instance.user.username,
+        'source': 'timeline:' + instance.user.username,
+        'target': 'user:' + instance.user.username,
     }
     follows.append(pageobject)
     pageobject = {
-        'source': 'user:' + instance.user.username,
-        'target': 'timeline:' + instance.school.page_id,
+        'source': 'timeline:' + instance.user.username,
+        'target': 'user:' + instance.school.page_id,
     }
     follows.append(pageobject)
     client.follow_many(follows)
@@ -50,4 +50,5 @@ def new_stream_school(sender, instance, **kwargs):
     if instance.page_id != school_page:
         instance.page_id = school_page
         instance.save(update_fields=['page_id'])
+
 
