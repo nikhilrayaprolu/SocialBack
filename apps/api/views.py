@@ -139,6 +139,41 @@ def me(request):
     return JsonResponse(request.user.username, safe=False)
 
 
+@login_required
+def add_repost_reaction(request):
+    if request.user.username != request.GET.get('username'):
+        return HttpResponse("Y", status=500)
+    activity_id = request.GET.get('id')
+    to_user_username = request.GET.get('touser').replace("user:", "")
+    client.reactions.add("repost", activity_id, user_id=request.user.username, target_feeds=["notification:" + to_user_username])
+
+    user_feed = client.feed("user", request.user.username)
+    user = UserMiniProfile.objects.filter(user__username=request.user.username)[0]
+    to_user = UserMiniProfile.objects.filter(user__username=to_user_username)[0]
+    activity_data = {
+        'actor': user.first_name + ' ' + user.last_name,
+        'actor_temp': {
+            'data': {
+                'name': user.first_name + ' ' + user.last_name,
+                'id': user.user.username,
+            }
+        },
+        'verb': 'repost',
+        'object': request.GET.get('text'),
+        'object_temp': {
+            'verb': 'post',
+            'actor': {
+                'data': {
+                    'name': to_user.first_name + ' ' + to_user.last_name
+                }
+            },
+            'object': request.GET.get('text')
+        },
+    }
+    user_feed.add_activity(activity_data)
+
+    return HttpResponse("Y", status=200)
+
 def getfeed(request, feedgroup, userid):
     print(request.POST)
     if request.method == 'GET':
