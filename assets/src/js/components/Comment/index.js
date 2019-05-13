@@ -16,7 +16,7 @@ export default class Comment extends React.Component {
         };
     }
     componentDidMount() {
-        fetch('/api/me')
+        fetch('/youngwall/me')
             .then(res => res.json())
             .then((result) => {
                 this.setState({

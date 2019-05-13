@@ -932,5 +932,6 @@ dialog::backdrop {
 @media print {
     * { columns: auto !important; }
 }
+
 /* noscript is handled internally, as it depends on settings. */
 

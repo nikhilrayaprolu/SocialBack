@@ -22,7 +22,7 @@ class Home extends React.Component {
         };
     }
     componentDidMount() {
-        fetch('/api/me')
+        fetch('/youngwall/me')
             .then(res => res.json())
             .then((result) => {
                 this.setState({
@@ -93,6 +93,19 @@ class Home extends React.Component {
                     Header={() => (
                                       <UserBar {...props} />
                           )}
+          HeaderRight={() => (
+            <Dropdown>
+              <div>
+                <Link
+                  onClick={() => {
+                    props.onRemoveActivity(props.activity.id);
+                  }}
+                >
+                  Remove
+                </Link>
+              </div>
+            </Dropdown>
+          )}
                   Footer={() => (
                       <div style={ {padding: '8px 16px'} }>
                           <LikeButton {...props} />
@@ -100,9 +113,9 @@ class Home extends React.Component {
                                 activity={props.activity}
                                 onToggleReaction={() => {
                                     console.log(props);
-                                    addReaction("test4", props.activity.id, props.activity.origin, props.activity.object);
+                                    addReaction(userid, props.activity.id, props.activity.origin, props.activity.object);
                                 }}
-                                userId="test4"
+                                userId=''
                           />
                           <CommentField
                               activity={props.activity}

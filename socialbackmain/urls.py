@@ -13,8 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework_jwt.views import refresh_jwt_token
@@ -31,4 +33,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url('api-token-auth/', obtain_jwt_token),
     url(r'youngwall/', include('apps.api.urls')),
+
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

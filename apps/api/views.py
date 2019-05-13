@@ -86,6 +86,32 @@ def friends(request):
     return JsonResponse({"friends": friend_list_serializer.data, "non_friends": non_friend_list_serializer.data,
                          "userid": user.username}, safe=False)
 
+def individualname(element):
+    return element[0]
+@login_required
+def followers(request):
+    user = request.user
+    userfriends = map(individualname, Follow.objects.filter(from_page=user.mini_user_profile.page_id).values_list('to_page'))
+    followers = map(individualname, Follow.objects.filter(to_page=user.mini_user_profile.page_id).values_list('from_page'))
+    followers_friends = list(set(followers) & set(userfriends))
+    following_followers_list = UserMiniProfile.objects.annotate(
+        username=F('user__username'), schoolname=F('school__schoolname'),
+        name=Concat(F('first_name'), Value(' '), F('last_name')),
+        classname=F('user__section__section__section_class__class_level'),
+        section=F('user__section__section__section_name')) \
+        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name', 'is_staff') \
+        .filter(user__username__in=followers_friends)
+    non_following_followers_list = UserMiniProfile.objects.annotate(
+        username=F('user__username'), schoolname=F('school__schoolname'),
+        name=Concat(F('first_name'), Value(' '), F('last_name')),
+        classname=F('user__section__section__section_class__class_level'),
+        section=F('user__section__section__section_name')) \
+        .values('pk', 'email', 'birthday', 'username', 'schoolname', 'classname', 'section', 'name', 'is_staff') \
+        .filter(user__username__in=followers).exclude(user__username__in=followers_friends)
+    following_followers_serializer = FriendSerializer(following_followers_list, many=True)
+    non_following_followers_serializer = FriendSerializer(non_following_followers_list, many=True)
+    return JsonResponse({"following_followers": following_followers_serializer.data, "non_following_followers": non_following_followers_serializer.data,
+                         "userid": user.username}, safe=False)
 
 @login_required
 def search(request):
@@ -142,6 +168,7 @@ def me(request):
 @login_required
 def add_repost_reaction(request):
     if request.user.username != request.GET.get('username'):
+        print(request.user.username, request.GET.get('username'))
         return HttpResponse("Y", status=500)
     activity_id = request.GET.get('id')
     to_user_username = request.GET.get('touser').replace("user:", "")
@@ -215,12 +242,48 @@ class GroupStats(APIView):
         }
         return Response(context, status=200)
 
+class FollowCount(APIView):
+    def get_following_count(self, page_id):
+        return Follow.objects.filter(from_page=page_id).count()
+
+    def get_follower_count(self, page_id):
+        return Follow.objects.filter(to_page=page_id).count()
+
+    def get(self, request):
+        print(request.user)
+        user = request.user
+        user_page = user.mini_user_profile.page_id
+        username = user.username
+        first_name = user.mini_user_profile.first_name
+        email =  user.email
+        following = self.get_following_count(user_page)
+        followers = self.get_follower_count(user_page)
+        context = {
+            'username': username,
+            'first_name': first_name,
+            'email': email,
+            'following': following,
+            'followers': followers
+        }
+        return Response(context, status=200)
 
 class isModerator(APIView):
     def get_follow(self, from_page, to_page):
         followtable = Follow.objects.filter(from_page=from_page, to_page=to_page)
         return followtable
 
+    def get_follower_list(self, to_page):
+        return Follow.objects.filter(to_page=to_page).values_list('from_page')
+
+
+    def get_following_list(self, from_page):
+        return Follow.objects.filter(from_page=from_page).values_list('to_page')
+
+    def get_school_mates(self, group_page, school):
+        return Follow.objects.filter(to_page=group_page, from_page__user__school=school).count()
+
+    def sub_follow_list_group(self, group_page, intersection_list):
+        return Follow.objects.filter(to_page=group_page, from_page__in=intersection_list).count()
     def get(self, request, feedgroup):
         print(request.user)
         user_mini_profile = UserMiniReadOnlyProfileSerializer(request.user.mini_user_profile)
@@ -236,8 +299,17 @@ class isModerator(APIView):
                 group_object = {}
                 group_details = {}
 
+        followers = self.get_follower_list(request.user.mini_user_profile.page_id)
+        following = self.get_following_list(request.user.mini_user_profile.page_id)
+        schoolmates = self.get_school_mates(feedgroup, request.user.mini_user_profile.school)
+        sub_followers = self.sub_follow_list_group(feedgroup, followers)
+        sub_following = self.sub_follow_list_group(feedgroup, following)
+        group_extra_details = {
+            'schoolmates_count': schoolmates,
+            'following_count': sub_followers,
+            'followers_count': sub_followers
+        }
         follow_relation = self.get_follow(request.user.mini_user_profile.page_id, feedgroup)
-        print(follow_relation)
         following = False
         if follow_relation:
             following = True
@@ -245,13 +317,13 @@ class isModerator(APIView):
         try:
             moderator = FeedModerator.objects.get(page=feedgroup, moderator=request.user)
             if moderator:
-                return Response({'ismoderator': True, 'user_profile': user_mini_profile.data, 'group_details': group_details, 'following': following},
+                return Response({'ismoderator': True, 'user_profile': user_mini_profile.data, 'group_details': group_details,'group_extra_details': group_extra_details, 'following': following},
                                 status=200)
             else:
-                return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details, 'following': following},
+                return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details,'group_extra_details': group_extra_details, 'following': following},
                                 status=200)
         except FeedModerator.DoesNotExist:
-            return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details, 'following': following},
+            return Response({'ismoderator': False, 'user_profile': user_mini_profile.data, 'group_details': group_details,'group_extra_details': group_extra_details, 'following': following},
                             status=200)
 
 class ApproveFeed(APIView):

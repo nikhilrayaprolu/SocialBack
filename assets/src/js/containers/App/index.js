@@ -10,6 +10,8 @@ import SchoolFeed from "../../components/School";
 import CourseGroup from "../../components/Course";
 import SearchUsers from "../../components/searchfilter";
 import GroupStats from "../../components/GroupStats";
+import SideBar from "../../components/SideBar";
+import Followers from "../../components/Followers";
 
 class App extends React.Component {
   render () {
@@ -28,10 +30,12 @@ class App extends React.Component {
           <Route path='/youngwall/search/users/' component={SearchUsers}/>
           <Route path='/youngwall/unapprovedgroup/:groupid' component={UnApprovedGroup}/>
           <Route path='/youngwall/friends' component={Friends}/>
+          <Route path='/youngwall/myfollowers' component={Followers}/>
           <Route path='/youngwall/school/:schoolid' component={SchoolFeed}/>
           <Route path='/youngwall/school' component={SchoolFeed}/>
           <Route path='/youngwall/course/:courseid' component={CourseGroup}/>
           <Route path='/youngwall/groupstats' component={GroupStats}/>
+          <Route path='/youngwall/sidebar' component={SideBar}/>
           <Route path='/youngwall/:userid' component={Feed}/>
 
       </Switch>

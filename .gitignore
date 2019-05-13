@@ -6,7 +6,8 @@ __pycache__/
 assets/dist
 # C extensions
 *.so
-
+media
+school_logo
 # Distribution / packaging
 .Python
 build/

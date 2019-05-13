@@ -5,6 +5,7 @@ import {
     FlatFeed,
     LikeButton,
     StatusUpdateForm,
+    ActivityFooter
 } from "react-activity-feed";
 import UnApprovedGroup from "../UnApprovedGroup";
 import SchoolGroup from "../SchoolGroup";
@@ -21,6 +22,7 @@ class Group extends React.Component {
             user_profile: null,
             globalgroup: true,
             group_details: null,
+            group_extra_details: null,
             following: false,
         };
         this.feedid = this.props.match.params.groupid;
@@ -43,6 +45,7 @@ class Group extends React.Component {
                         user_profile: result.user_profile,
                         globalgroup: true,
                         group_details: result.group_details,
+                        group_extra_details: result.group_extra_details,
                         following: result.following,
                     });
                 },
@@ -113,8 +116,10 @@ class Group extends React.Component {
                         feedGroup = {this.feedgroup}
                         userId = { this.feedid }
                         doFeedRequest = {feedrequest}
-                        Activity={(props) =>
-                            <Activity {...props}
+                        Activity={(props) => {
+                            const hasSubActivity = Boolean(props.activity.object.object);
+                            const activity = hasSubActivity ? props.activity.object : props.activity;
+                            return (<Activity {...props}
                                 Header={() => (
                                           <UserBar {...props} />
                                       )}
@@ -127,8 +132,8 @@ class Group extends React.Component {
                                               <CommentList activityId={props.activity.id} />
                                           </div>
                                       )}
-                            />
-                        }
+                            />)
+                        }}
                     />
                 </div>
 
@@ -150,10 +155,13 @@ class Group extends React.Component {
             <React.Fragment>
                 { this.state.group_details ? (
                     <div className="card ys-card">
-                        <img className="card-img-top ys-group-card-img-top" src="http://www.gstatic.com/tv/thumb/persons/1083/1083_v9_ba.jpg" alt="Card image cap" />
+                        <img className="card-img-top ys-group-card-img-top" src={this.state.group_details.group_image} alt="Card image cap" onError={(e)=>{e.target.onerror = null; e.target.src="http://www.gstatic.com/tv/thumb/persons/1083/1083_v9_ba.jpg"}}  />
                         <div className="card-body">
                             <h5 className="card-title">{this.state.group_details.name}</h5>
                             <p className="card-text">{this.state.group_details.description}</p>
+                            <p className="card-text">SchoolMates: {this.state.group_extra_details.schoolmates_count}</p>
+                            <p className="card-text">MyFollowers: {this.state.group_extra_details.followers_count}</p>
+                            <p className="card-text">Friends: {this.state.group_extra_details.following_count}</p>
                             <button className="btn btn-success" onClick={() => {this.handlefollow()}}>{this.state.following? 'UnFollow': 'Follow'}</button>
                         </div>
                     </div>

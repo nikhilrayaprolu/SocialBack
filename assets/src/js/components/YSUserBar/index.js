@@ -16,7 +16,7 @@ export default class UserBar extends React.Component {
         };
     }
     componentDidMount() {
-        fetch('/api/me')
+        fetch('/youngwall/me')
             .then(res => res.json())
             .then((result) => {
                 this.setState({
@@ -33,6 +33,7 @@ export default class UserBar extends React.Component {
 
     render() {
       let timestamp = this.props.activity.time;
+      console.log(this.props.activity);
       let username = (this.props.activity.actor.data)? this.props.activity.actor.data.name: this.props.activity.actor;
       let username_id = (this.props.activity.actor.data)? this.props.activity.actor.data.id: this.props.activity.actor.id;
         let time = humanizeTimestamp(timestamp);
@@ -42,9 +43,9 @@ export default class UserBar extends React.Component {
         if(isLoaded && username_id === userid)
             renderDropDown = (
                 <Dropdown>
-                    <ul>
-                        <li><Link onClick={() => {this.props.onRemoveActivity(this.props.activity.id);}}>Remove</Link></li>
-                    </ul>
+                    <div>
+                        <Link onClick={() => {this.props.onRemoveActivity(this.props.activity.id);}}>Remove</Link>
+                    </div>
                 </Dropdown>
             );
     return (
