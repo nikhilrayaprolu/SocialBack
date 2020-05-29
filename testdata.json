@@ -1,0 +1,219 @@
+[
+{
+  "model": "api.organization",
+  "fields": {
+    "name": "dps",
+    "description": "Delhi Public School",
+    "logo": "",
+    "active": true
+  }
+},
+{
+  "model": "api.organization",
+  "fields": {
+    "name": "nps",
+    "description": "Nalgonda Public School",
+    "logo": "",
+    "active": true
+  }
+},
+{
+  "model": "api.page",
+  "pk": "1",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "10",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "11",
+  "fields": {
+    "ownertype": "school"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "12",
+  "fields": {
+    "ownertype": "school"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "2",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "3",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "4",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "5",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "6",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "7",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "8",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "9",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test1",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test10",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test2",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test3",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test4",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test5",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test6",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test7",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test8",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "test9",
+  "fields": {
+    "ownertype": "user"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "testschool11",
+  "fields": {
+    "ownertype": "school"
+  }
+},
+{
+  "model": "api.page",
+  "pk": "testschool12",
+  "fields": {
+    "ownertype": "school"
+  }
+},
+{
+  "model": "api.school",
+  "pk": "1",
+  "fields": {
+    "schoolname": "testschool1",
+    "principal": "testprincipal1",
+    "email": "testprincipal1@test.com",
+    "contact_number": "9701824795",
+    "address": "D19, OBH IIIT Hyderabad\r\nGachibowli",
+    "website": "test1.com",
+    "board": "cbse",
+    "schoollogo": "school_logo/no-image.jpg",
+    "page_id": "11",
+    "school_feed": false
+  }
+},
+{
+  "model": "api.school",
+  "pk": "2",
+  "fields": {
+    "schoolname": "testschool2",
+    "principal": "testprincipal2",
+    "email": "testprincipal2@test.com",
+    "contact_number": "9701824795",
+    "address": "D19, OBH IIIT Hyderabad\r\nGachibowli",
+    "website": "test2.com",
+    "board": "cbse",
+    "schoollogo": "school_logo/no-image.jpg",
+    "page_id": "12",
+    "school_feed": false
+  }
+}
